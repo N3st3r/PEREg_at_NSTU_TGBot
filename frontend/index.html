@@ -1,1 +1,2646 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="light">
 
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Запись на физкультуру | НГТУ НЭТИ</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        :root {
+            --bg-page: #f4f5f7;
+            --bg-card: #ffffff;
+            --bg-inner: #f8fafc;
+            --accent-green: #00b956;
+            --accent-green-hover: #009e49;
+            --accent-red: #e52c43;
+            --text-main: #111111;
+            --text-sub: #555555;
+            --border-color: #e4e4e7;
+            --disabled-bg: #d5d5d5;
+            --disabled-text: #8c8c8c;
+            --btn-map-bg: rgba(0, 0, 0, 0.04);
+            --btn-map-bg-hover: rgba(0, 0, 0, 0.08);
+        }
+
+        [data-theme="dark"] {
+            --bg-page: #0f1115;
+            --bg-card: #181a20;
+            --bg-inner: #21242c;
+            --accent-green: #00b956;
+            --accent-green-hover: #00e676;
+            --accent-red: #ef5350;
+            --text-main: #f4f4f5;
+            --text-sub: #9aa0a6;
+            --border-color: #27272a;
+            --disabled-bg: #2a2d35;
+            --disabled-text: #52525b;
+            --btn-map-bg: rgba(255, 255, 255, 0.06);
+            --btn-map-bg-hover: rgba(255, 255, 255, 0.12);
+        }
+
+        [data-theme="dark"] body,
+        [data-theme="dark"] .page-container {
+            background-color: var(--bg-page) !important;
+            color: var(--text-main);
+        }
+
+        [data-theme="dark"] footer,
+        [data-theme="dark"] .footer-container {
+            background-color: var(--bg-card) !important;
+            color: var(--text-sub);
+        }
+
+        * {
+            box-sizing: border-box;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+        }
+
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            font-family: 'Roboto', -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            background-color: #f4f5f7;
+            color: var(--text-main);
+            padding-bottom: 0;
+            -webkit-font-smoothing: antialiased;
+            min-width: 100%;
+            min-height: 100vh;
+        }
+
+        main,
+        .main-content {
+            flex: 1 0 auto;
+        }
+
+        .teacher-link {
+            color: rgb(0, 204, 115) !important;
+            text-decoration: underline;
+            text-decoration-color: rgba(0, 204, 115, 0.4);
+            --Link-underlineColor: rgba(0, 204, 115, 0.4);
+            transition: opacity 0.2s ease;
+        }
+
+        .teacher-link:hover {
+            opacity: 0.8;
+        }
+
+        .site-header {
+            background: var(--bg-card);
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 28px;
+            width: 100%;
+        }
+
+        .header-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--text-main);
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .icon-btn {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            height: 36px;
+            padding: 0 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-main);
+            font-size: 13px;
+            font-weight: 500;
+            gap: 6px;
+        }
+
+        .icon-btn:hover {
+            background: var(--btn-map-bg);
+        }
+
+        .lang-dropdown-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+
+        .flag-icon {
+            width: 20px;
+            height: 14px;
+            border-radius: 2px;
+            object-fit: cover;
+            box-shadow: 0 0 1px rgba(0, 0, 0, 0.3);
+            flex-shrink: 0;
+        }
+
+        .lang-menu {
+            position: absolute;
+            top: calc(100% + 6px);
+            right: 0;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+            z-index: 1000;
+            min-width: 160px;
+            padding: 6px 0;
+        }
+
+        .lang-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 14px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-main);
+            transition: background-color 0.15s ease;
+        }
+
+        .lang-item:hover {
+            background-color: var(--bg-inner);
+        }
+
+        .lang-item.active {
+            font-weight: 700;
+            background-color: rgba(0, 185, 86, 0.08);
+            color: var(--accent-green);
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            padding: 6px 10px;
+            border-radius: 8px;
+            transition: background-color 0.15s ease;
+        }
+
+        .user-profile:hover {
+            background-color: var(--btn-map-bg);
+        }
+
+        .user-profile-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+
+        .user-info {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            line-height: 1.2;
+        }
+
+        .user-name {
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .user-role {
+            font-size: 12px;
+            color: var(--text-sub);
+        }
+
+        .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: #e4e4e7;
+            color: #52525b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .user-menu {
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.12), 0 8px 10px -6px rgba(0, 0, 0, 0.08);
+            z-index: 1000;
+            min-width: 240px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .user-menu-info {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .user-menu-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .user-menu-status {
+            font-size: 12px;
+            color: var(--text-sub);
+        }
+
+        .user-menu-divider {
+            height: 1px;
+            background-color: var(--border-color);
+            margin: 2px 0;
+        }
+
+        .user-menu-logout {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: transparent;
+            border: none;
+            color: var(--accent-red);
+            font-size: 14px;
+            font-weight: 500;
+            padding: 8px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.15s ease;
+        }
+
+        .user-menu-logout:hover {
+            background-color: rgba(229, 44, 67, 0.08);
+        }
+
+        .page-container {
+            width: 100%;
+            max-width: 1560px;
+            min-width: 320px;
+            margin: 0 auto;
+            padding: 0 30px;
+        }
+
+        .top-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .page-title {
+            margin: 0 0 6px 0;
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+        }
+
+        .health-group {
+            color: var(--text-sub);
+            font-size: 14px;
+            font-weight: 400;
+        }
+
+        .deadline-badge {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            color: var(--text-sub);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+        }
+
+        .deadline-badge-date {
+            color: #000000;
+            font-weight: 700;
+        }
+
+        [data-theme="dark"] .deadline-badge-date {
+            color: #ffffff;
+        }
+
+        .main-card {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 36px 40px;
+            margin-bottom: 16px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+        }
+
+        .step-section {
+            margin-bottom: 36px;
+        }
+
+        .step-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .step-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin: 0 0 8px 0;
+        }
+
+        .step-subtitle {
+            font-size: 14px;
+            color: var(--text-sub);
+            margin-bottom: 16px;
+        }
+
+        .step-subtitle.error {
+            color: var(--accent-red);
+        }
+
+        .price-category {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-sub);
+            margin: 16px 0 12px 0;
+        }
+
+        .radio-grid {
+            display: flex;
+            flex-wrap: nowrap;
+            gap: 16px 28px;
+            width: 100%;
+            overflow-x: auto;
+            padding-bottom: 4px;
+        }
+
+        .radio-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            cursor: pointer;
+            user-select: none;
+            flex: 0 0 auto;
+            min-width: 160px;
+        }
+
+        .radio-item input[type="radio"] {
+            display: none;
+        }
+
+        .custom-radio {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #a1a1aa;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 1px;
+            flex-shrink: 0;
+            box-sizing: border-box;
+            pointer-events: none;
+        }
+
+        .radio-item input[type="radio"]:checked+.custom-radio,
+        .slot-radio-item input[type="radio"]:checked+.custom-radio {
+            border-color: var(--accent-green);
+        }
+
+        .radio-item input[type="radio"]:checked+.custom-radio::after,
+        .slot-radio-item input[type="radio"]:checked+.custom-radio::after {
+            content: '';
+            width: 10px;
+            height: 10px;
+            background: var(--accent-green);
+            border-radius: 50%;
+        }
+
+        .radio-content {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .radio-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .radio-link {
+            font-size: 13px;
+            color: var(--accent-green);
+            text-decoration: none;
+            margin-top: 2px;
+        }
+
+        .radio-link:hover {
+            text-decoration: underline;
+        }
+
+        .disclaimer-text {
+            font-size: 13px;
+            color: var(--text-main);
+            line-height: 1.5;
+            margin-top: 24px;
+        }
+
+        .days-grid {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 12px;
+        }
+
+        .teachers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 24px;
+            margin-top: 16px;
+        }
+
+        .teacher-column {
+            display: flex;
+            flex-direction: column;
+            background: var(--bg-inner);
+            padding: 16px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+        }
+
+        .teacher-profile-head {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 14px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .teacher-avatar-sm {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            object-fit: cover;
+            background: #e4e4e7;
+            flex-shrink: 0;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .teacher-avatar-sm:hover {
+            opacity: 0.85;
+        }
+
+        .teacher-name-sm {
+            font-weight: 700;
+            font-size: 13px;
+            line-height: 1.2;
+            color: var(--text-main);
+        }
+
+        .teacher-post-sm {
+            font-size: 11px;
+            color: var(--text-sub);
+            margin-top: 2px;
+        }
+
+        .slot-radio-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .slot-radio-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            cursor: pointer;
+            user-select: none;
+            padding: 6px;
+            border-radius: 6px;
+        }
+
+        .slot-radio-item:hover {
+            background: rgba(0, 0, 0, 0.02);
+        }
+
+        .slot-radio-item input[type="radio"] {
+            display: none;
+        }
+
+        .slot-info-box {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.3;
+            pointer-events: none;
+        }
+
+        .slot-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .slot-places {
+            font-size: 12px;
+            color: var(--text-sub);
+        }
+
+        .action-card {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 20px 24px;
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+        }
+
+        .btn-submit {
+            background: var(--accent-green);
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            min-width: 130px;
+        }
+
+        .btn-submit:disabled {
+            background: var(--disabled-bg);
+            color: var(--disabled-text);
+            cursor: not-allowed;
+        }
+
+        .btn-cancel {
+            background: var(--accent-red);
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .success-tag {
+            display: inline-block;
+            background: rgba(0, 185, 86, 0.12);
+            color: var(--accent-green);
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .success-day {
+            font-size: 32px;
+            font-weight: 700;
+            margin: 0 0 6px 0;
+        }
+
+        .success-meta {
+            font-size: 14px;
+            color: var(--text-sub);
+            margin-bottom: 20px;
+        }
+
+        .teacher-box {
+            background: var(--bg-inner);
+            border-radius: 10px;
+            padding: 18px;
+            display: flex;
+            gap: 16px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border-color);
+        }
+
+        .teacher-photo {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            object-fit: cover;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .teacher-photo:hover {
+            opacity: 0.85;
+        }
+
+        .btn-how-to-get {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--btn-map-bg);
+            border: 1px solid var(--border-color);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-main);
+            text-decoration: none;
+            margin-bottom: 20px;
+        }
+
+        .btn-how-to-get:hover {
+            background: var(--btn-map-bg-hover);
+        }
+
+        .teacher-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            cursor: pointer;
+            object-fit: cover;
+            transition: opacity 0.2s;
+        }
+
+        .teacher-avatar:hover {
+            opacity: 0.85;
+        }
+
+        .green-link {
+            color: #00b956;
+            text-decoration: none;
+        }
+
+        .green-link:hover {
+            text-decoration: underline;
+        }
+
+        .avatar-modal-img {
+            max-width: 80vw;
+            max-height: 80vh;
+            border-radius: 4px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .collapsible-content.text-collapsed {
+            max-height: 52px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .toggle-btn {
+            background: none;
+            border: none;
+            padding: 8px 0;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .modal-card {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 32px 28px 24px;
+            max-width: 580px;
+            width: 90%;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        #info-modal .modal-card {
+            max-width: 850px;
+        }
+
+        .modal-title {
+            font-size: 22px;
+            font-weight: 700;
+            margin: 0 0 12px 0;
+            color: var(--text-main);
+        }
+
+        .modal-text {
+            font-size: 15px;
+            color: var(--text-sub);
+            margin-bottom: 28px;
+            line-height: 1.5;
+        }
+
+        .modal-text p {
+            margin: 0 0 10px 0;
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: space-between;
+            gap: 16px;
+            width: 100%;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 15px;
+            cursor: pointer;
+            border: none;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 48px;
+            box-sizing: border-box;
+        }
+
+        .btn-secondary {
+            background: var(--bg-inner, #f4f5f7);
+            color: var(--text-main, #111111);
+        }
+
+        .btn-secondary:hover {
+            background: #e4e4e7;
+        }
+
+        .btn-danger {
+            background: var(--accent-red, #e52c43);
+            color: #ffffff;
+        }
+
+        .btn-danger:hover {
+            opacity: 0.9;
+        }
+
+        .btn-modal-cancel {
+            background: transparent;
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .btn-modal-confirm {
+            background: var(--accent-green);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            flex: 1;
+        }
+
+        #loader {
+            text-align: center;
+            padding: 60px;
+            color: var(--text-sub);
+            font-size: 15px;
+        }
+
+        .user-profile-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: rgba(0, 185, 86, 0.08);
+            border-radius: 8px;
+            padding: 10px 12px;
+        }
+
+        .user-profile-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .user-profile-name {
+            font-weight: 600;
+            font-size: 14px;
+            color: #111827;
+        }
+
+        .user-profile-role {
+            font-size: 12px;
+            color: #6B7280;
+            margin-top: 2px;
+        }
+
+        .app-footer {
+            width: 100%;
+            margin-top: auto;
+            flex-shrink: 0;
+
+            background: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOTYwIiBoZWlnaHQ9IjE3NiIgdmlld0JveD0iMCAwIDk2MCAxNzYiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxwYXRoIGQ9Ik0wIDBIOTYwVjE3NkgwVjBaIiBmaWxsPSIjRTZFNkU2Ii8+CjxwYXRoIGQ9Ik04MDguMDc5IDBIOTYwVjE3Nkg4MDguMDc5VjBaIiBmaWxsPSJ1cmwoI3BhaW50MF9saW5lYXJfMzMxNF8zNDM4MikiLz4KPHBhdGggZD0iTTk2MCAwVjIzLjI2OTJMODM0LjU2NSAxNzZINjIzLjE3NUw2ODcuNjQyIDBIOTYwWiIgZmlsbD0idXJsKCNwYWludDFfbGluZWFyXzMzMTRfMzQzODIpIi8+CjxwYXRoIGQ9Ik02MTIuNjgxIDBMNTA1LjIzNyAxNzZMMTY1LjkxNCAwSDYxMi42ODFaIiBmaWxsPSJ1cmwoI3BhaW50Ml9saW5lYXJfMzMxNF8zNDM4MikiLz4KPHBhdGggZD0iTTAgMTc2SDUwNS4yMzdMMTY1LjkxNCAwSDBWMTc2WiIgZmlsbD0idXJsKCNwYWludDNfbGluZWFyXzMzMTRfMzQzODIpIi8+CjxwYXRoIGQ9Ik05NjAgMjMuMjY5Mkw2MjMuMTc1IDE3Nkw2ODcuNjQyIDBIOTYwVjIzLjI2OTJaIiBmaWxsPSJ1cmwoI3BhaW50NF9saW5lYXJfMzMxNF8zNDM4MikiLz4KPHBhdGggZD0iTTYxMi42ODEgMEw1MDUuMjM3IDE3NkwyMzUuODc3IDBINjEyLjY4MVoiIGZpbGw9IiNEOUQ5RDkiLz4KPHBhdGggZD0iTTU2MC43MDggMEw1MDUuMjM3IDE3NkwyODIuODUzIDBINTYwLjcwOFoiIGZpbGw9InVybCgjcGFpbnQ1X2xpbmVhcl8zMzE0XzM0MzgyKSIvPgo8ZGVmcz4KPGxpbmVhckdyYWRpZW50IGlkPSJwYWludDBfbGluZWFyXzMzMTRfMzQzODIiIHgxPSI0ODAiIHkxPSIwIiB4Mj0iNDgwIiB5Mj0iMTc2IiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+CjxzdG9wIHN0b3AtY29sb3I9IiNFNkU2RTYiLz4KPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjRDZENkQ2Ii8+CjwvbGluZWFyR3JhZGllbnQ+CjxsaW5lYXJHcmFkaWVudCBpZD0icGFpbnQxX2xpbmVhcl8zMzE0XzM0MzgyIiB4MT0iNTk2Ljc5NiIgeTE9IjE3NiIgeDI9IjQ4Ni42MjEiIHkyPSItMTQ0LjQ1NyIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiPgo8c3RvcCBzdG9wLWNvbG9yPSIjREVERURFIi8+CjxzdG9wIG9mZnNldD0iMC42NDA2MjUiIHN0b3AtY29sb3I9IiNEN0Q3RDciLz4KPC9saW5lYXJHcmFkaWVudD4KPGxpbmVhckdyYWRpZW50IGlkPSJwYWludDJfbGluZWFyXzMzMTRfMzQzODIiIHgxPSIyNDkuMTI4IiB5MT0iNS4xNDIxMmUtMDciIHgyPSIzODcuNDMiIHkyPSIzMjMuNzg3IiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+CjxzdG9wIHN0b3AtY29sb3I9IiNFNkU2RTYiLz4KPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjRTZFNkU2Ii8+CjwvbGluZWFyR3JhZGllbnQ+CjxsaW5lYXJHcmFkaWVudCBpZD0icGFpbnQzX2xpbmVhcl8zMzE0XzM0MzgyIiB4MT0iMC45NDk1NDgiIHkxPSI8OCIgeDI9IjgyNC42OSIgeTI9IjQ2OC43NDQiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIj4KPHN0b3Agc3RvcC1jb2xvcj0iI0U2RTZFNiIvPgo8c3RvcCBvZmZzZXQ9IjAuNTE1NjI1IiBzdG9wLWNvbG9yPSIjREFEQURBIi8+CjwvbGluZWFyR3JhZGllbnQ+CjxsaW5lYXJHcmFkaWVudCBpZD0icGFpbnQ0X2xpbmVhcl8zMzE0XzM0MzgyIiB4MT0iLTkuOTcwMzMiIHkxPSIzLjM4NDYxIiB4Mj0iMjQ2LjM5OSIgeTI9IjUyMC45ODUiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIj4KPHN0b3Agc3RvcC1jb2xvcj0iI0U1RTVFNSIvPgo8c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNEOEQ4RDgiLz4KPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjRDdEN0Q3Ii8+CjwvbGluZWFyR3JhZGllbnQ+CjxsaW5lYXJHcmFkaWVudCBpZD0icGFpbnQ1X2xpbmVhcl8zMzE0XzM0MzgyIiB4MT0iMzEwLjMzOCIgeTE9IjUuMDc4NjdlLTA2IiB4Mj0iNDcxLjM2NCIgeTI9IjIwMi44ODQiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIj4KPHN0b3Agc3RvcC1jb2xvcj0iI0RCREJEQiIvPgo8c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNFN3E3RTciLz4KPC9saW5lYXJHcmFkaWVudD4KPC9kZWZzPgo8L3N2Zz4K") right center / cover no-repeat #e6e6e6;
+
+            padding: 32px 0;
+            box-sizing: border-box;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            align-items: flex-start;
+            gap: 48px;
+        }
+
+        .footer-col {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .footer-col-right {
+            margin-left: auto;
+            align-self: center;
+        }
+
+        .footer-title {
+            font-weight: 700;
+            font-size: 16px;
+            color: #4a4a4a;
+            margin-bottom: 4px;
+        }
+
+        .footer-text {
+            margin: 0;
+            font-size: 13px;
+            line-height: 1.4;
+            color: #888888;
+        }
+
+        .footer-text.copyright {
+            margin-top: 8px;
+        }
+
+        .footer-link {
+            font-size: 13px;
+            color: #888888;
+            text-decoration: underline;
+            text-decoration-color: rgba(0, 204, 115, 0.4);
+            transition: color 0.15s ease-in-out;
+        }
+
+        .footer-link:hover {
+            color: #333333;
+        }
+
+        .btn-portal {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: inherit;
+            font-weight: 500;
+            font-size: 1rem;
+            line-height: 1.235;
+            text-decoration: none;
+            padding: 12px 14px;
+            border-radius: 6px;
+            color: rgb(96, 96, 96);
+            background-color: rgb(241, 241, 241);
+            transition: background-color 0.15s ease-in-out;
+        }
+
+        .btn-portal:hover {
+            background-color: #e5e5e5;
+        }
+
+        .portal-icon {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .footer-container {
+                flex-direction: column;
+                gap: 24px;
+            }
+
+            .footer-col-right {
+                margin-left: 0;
+                align-self: flex-start;
+            }
+        }
+
+        .toast-container {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            z-index: 10000;
+            opacity: 0;
+            visibility: hidden;
+            transition: transform 0.225s cubic-bezier(0, 0, 0.2, 1), opacity 0.225s cubic-bezier(0, 0, 0.2, 1), visibility 0.225s;
+            width: calc(100% - 32px);
+            max-width: 420px;
+            pointer-events: none;
+        }
+
+        .toast-container.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(0);
+            pointer-events: auto;
+        }
+
+        .MuiAlert-outlinedSuccess {
+            display: flex;
+            align-items: center;
+            background-color: #ffffff;
+            border: 1.5px solid #00cc73;
+            border-radius: 10px;
+            padding: 12px 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            box-sizing: border-box;
+            width: 100%;
+        }
+
+        .MuiAlert-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: #eafaf1;
+            border-radius: 8px;
+            margin-right: 14px;
+            flex-shrink: 0;
+        }
+
+        .MuiAlert-icon svg {
+            fill: #00cc73;
+            width: 24px;
+            height: 24px;
+        }
+
+        .MuiAlert-message {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .MuiAlertTitle-root {
+            font-weight: 700;
+            font-size: 15px;
+            line-height: 1.2;
+            color: #1a1a1a;
+            margin: 0 0 3px 0;
+        }
+
+        .MuiTypography-caption {
+            font-size: 13px;
+            color: #555555;
+            line-height: 1.2;
+        }
+
+        .MuiAlert-action {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4px;
+            cursor: pointer;
+            margin-left: 12px;
+            border-radius: 50%;
+            transition: background-color 0.15s ease;
+        }
+
+        .MuiAlert-action:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .MuiAlert-action svg {
+            fill: #9e9e9e;
+            width: 20px;
+            height: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="site-header">
+        <div class="header-logo">
+            <svg width="28" height="28" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <mask id="mask0_1120_10421" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="42"
+                    height="42">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M42 0H0V42H42V0ZM30 12H12V30H30V12Z"
+                        fill="#D9D9D9" />
+                </mask>
+                <g mask="url(#mask0_1120_10421)">
+                    <path d="M42 0H0V42L42 0Z" fill="#C00140" />
+                    <path d="M0 42H42V0L0 42Z" fill="#0E8C59" />
+                </g>
+            </svg>
+            Запись на физкультуру | НГТУ НЭТИ
+        </div>
+        <div class="header-controls">
+            <button class="icon-btn" id="theme-toggle-btn" onclick="toggleTheme()" title="Сменить тему">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                        d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-2.98 0-5.4-2.42-5.4-5.4 0-1.81.89-3.42 2.26-4.4C12.92 3.04 12.46 3 12 3z">
+                    </path>
+                </svg>
+            </button>
+            <div class="lang-dropdown-wrapper">
+                <button class="icon-btn" id="lang-toggle-btn" onclick="toggleLangMenu(event)">
+                    <img id="selected-flag-img" src="" class="flag-icon" alt="RU">
+                    <span id="selected-lang-code">RU</span>
+                    <span style="font-size: 9px; opacity: 0.7; margin-left: 2px;">▼</span>
+                </button>
+                <div class="lang-menu hidden" id="lang-menu"></div>
+            </div>
+
+            <div class="user-profile-wrapper">
+                <div class="user-profile" id="user-profile-btn" onclick="toggleUserMenu(event)">
+                    <div class="avatar" id="user-avatar-container">
+                        <img id="user-avatar" src=""
+                            style="display: none; width: 100%; height: 100%; object-fit: cover;">
+                        <span id="user-initials">СТ</span>
+                    </div>
+                    <div class="user-info">
+                        <span class="user-name" id="user-name">Студент</span>
+                        <span class="user-role" id="user-role">Студент</span>
+                    </div>
+                    <span class="user-dropdown-arrow"
+                        style="font-size: 10px; opacity: 0.7; margin-left: 4px; color: var(--text-main);">▼</span>
+                </div>
+
+                <div class="user-menu hidden" id="user-menu">
+                    <div class="user-profile-card">
+                        <div class="user-profile-info">
+                            <span class="user-menu-name" id="menu-user-name">Студент</span>
+                            <span class="user-menu-status" id="menu-user-status">Студент</span>
+                        </div>
+                        <div class="user-profile-status-icon">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="12" cy="12" r="9" stroke="#10B981" stroke-width="2" />
+                                <circle cx="12" cy="12" r="5" fill="#10B981" />
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="user-menu-divider"></div>
+                    <button class="user-menu-logout" onclick="logoutApp()">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                            <path
+                                d="m17 8-1.41 1.41L17.17 11H9v2h8.17l-1.58 1.58L17 16l4-4zM5 5h7V3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h7v-2H5z">
+                            </path>
+                        </svg>
+                        <span>Выйти</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-container">
+        <div id="loader">Загрузка данных...</div>
+        <div id="main-content" style="display: none;"></div>
+    </div>
+
+    <div id="confirm-modal" class="modal-overlay hidden">
+        <div class="modal-card">
+            <h3 class="modal-title">Вы уверены, что хотите записаться?</h3>
+            <p class="modal-text">Убедитесь, что вы выбрали то, что хотели. Вам будет доступна возможность отменить свою
+                запись и сделать выбор снова.</p>
+            <div class="modal-actions">
+                <button type="button" class="btn-modal-cancel" onclick="closeConfirmModal()">Отменить</button>
+                <button type="button" class="btn-modal-confirm" id="btn-modal-submit"
+                    onclick="executeBooking()">Записаться</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="info-modal" class="modal-overlay hidden">
+        <div class="modal-card" id="info-modal-content"></div>
+    </div>
+
+    <div id="cancelModal" class="modal-overlay hidden">
+        <div class="modal-card">
+            <h3 class="modal-title">Вы уверены, что хотите отменить запись?</h3>
+            <p class="modal-text">Вам будет необходимо повторно записаться на физическую культуру</p>
+            <div class="modal-actions">
+                <button type="button" class="btn btn-secondary" onclick="closeCancelModal()">Закрыть</button>
+                <button type="button" class="btn btn-danger" onclick="confirmCancellation()">Отменить запись</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="avatarModal" class="modal-overlay hidden" onclick="closeAvatarModal()">
+        <img id="avatarFullImg" src="" alt="Увеличенный аватар" class="avatar-modal-img">
+    </div>
+
+    <div id="toast-container" class="toast-container">
+        <div class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation0 MuiAlert-root MuiAlert-colorSuccess MuiAlert-outlinedSuccess MuiAlert-outlined"
+            role="alert">
+            <div class="MuiAlert-icon">
+                <svg class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium" focusable="false" aria-hidden="true"
+                    viewBox="0 0 24 24">
+                    <path
+                        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2m0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8m4.59-12.42L10 14.17l-2.59-2.58L6 13l4 4 8-8z">
+                    </path>
+                </svg>
+            </div>
+            <div class="MuiAlert-message">
+                <div id="toast-title"
+                    class="MuiTypography-root MuiTypography-h5 MuiTypography-gutterBottom MuiAlertTitle-root">Запись
+                    сохранена</div>
+                <span id="toast-subtitle" class="MuiTypography-root MuiTypography-caption">Данные успешно
+                    сохранены</span>
+            </div>
+            <div class="MuiAlert-action" onclick="hideToast()">
+                <svg class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium" focusable="false" aria-hidden="true"
+                    viewBox="0 0 24 24">
+                    <path
+                        d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z">
+                    </path>
+                </svg>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.ready();
+        
+        const API_BASE_URL = ''; // Тут можно вставить ссылку вашего бэкенда/API (например, если используете Netlify как бесплатный хостинг для index.html, то обязательно нужно использовать туннель для проброса к вашему бэкенду, сгенерировать ссылку и вставить сюда (ex. TryCloudFlare))
+        // если же хостинг API и index.html на одном домене - оставить пустым
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const tgId = tg.initDataUnsafe?.user?.id || urlParams.get('tg_id') || 12345;
+
+        const DAY_NAMES = { 1: 'ПН', 2: 'ВТ', 3: 'СР', 4: 'ЧТ', 5: 'ПТ', 6: 'СБ' };
+        const DAY_FULL_NAMES = { 1: 'Понедельник', 2: 'Вторник', 3: 'Среда', 4: 'Четверг', 5: 'Пятница', 6: 'Суббота' };
+
+        const LESSON_TIMES = {
+            1: { start: '08:30', end: '10:00' },
+            2: { start: '10:15', end: '11:45' },
+            3: { start: '12:00', end: '13:30' },
+            4: { start: '14:00', end: '15:30' },
+            5: { start: '15:45', end: '17:15' },
+            6: { start: '17:30', end: '19:00' }
+        };
+
+        function formatTeacherName(teacher) {
+            return formatShortName(teacher);
+        }
+
+        let toastTimeout = null;
+
+        function showToast(title, subtitle, duration = 4000) {
+            const container = document.getElementById('toast-container');
+            const titleEl = document.getElementById('toast-title');
+            const subtitleEl = document.getElementById('toast-subtitle');
+
+            if (!container || !titleEl || !subtitleEl) return;
+
+            titleEl.textContent = title;
+            subtitleEl.textContent = subtitle;
+
+            container.classList.add('show');
+
+            if (toastTimeout) clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
+                hideToast();
+            }, duration);
+        }
+
+        function hideToast() {
+            const container = document.getElementById('toast-container');
+            if (container) {
+                container.classList.remove('show');
+            }
+            if (toastTimeout) {
+                clearTimeout(toastTimeout);
+                toastTimeout = null;
+            }
+        }
+
+        function makeSvgDataUri(svg) {
+            return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg.trim());
+        }
+
+        const SVG_RU = `<svg xmlns="http://www.w3.org/2000/svg" id="flag-icon-css-ru" viewBox="0 0 640 480"><g fill-rule="evenodd" stroke-width="1pt"><path fill="#fff" d="M0 0h640v480H0z"/><path fill="#0039a6" d="M0 160h640v320H0z"/><path fill="#d52b1e" d="M0 320h640v160H0z"/></g></svg>`;
+        const SVG_GB = `<svg xmlns="http://www.w3.org/2000/svg" id="flag-icon-css-gb" viewBox="0 0 640 480"><path fill="#012169" d="M0 0h640v480H0z"/><path fill="#FFF" d="M75 0l244 181L562 0h78v62L400 241l240 178v61h-80L320 301 81 480H0v-60l239-178L0 64V0h75z"/><path fill="#C8102E" d="M424 281l216 159v40L369 281h55zm-184 20l6 35L54 480H0l240-179zM640 0v3L391 191l2-44L590 0h50zM0 0l239 176h-60L0 42V0z"/><path fill="#FFF" d="M241 0v480h160V0H241zM0 160v160h640V160H0z"/><path fill="#C8102E" d="M0 193v96h640v-96H0zM273 0v480h96V0h-96z"/></svg>`;
+        const SVG_CN = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" id="flag-icon-css-cn" viewBox="0 0 640 480"><defs><path id="a" fill="#ffde00" d="M-.6.8L0-1 .6.8-1-.3h2z"/></defs><path fill="#de2910" d="M0 0h640v480H0z"/><use width="30" height="20" transform="matrix(71.9991 0 0 72 120 120)" xlink:href="#a"/><use width="30" height="20" transform="matrix(-12.33562 -20.5871 20.58684 -12.33577 240.3 48)" xlink:href="#a"/><use width="30" height="20" transform="matrix(-3.38573 -23.75998 23.75968 -3.38578 288 95.8)" xlink:href="#a"/><use width="30" height="20" transform="matrix(6.5991 -23.0749 23.0746 6.59919 288 168)" xlink:href="#a"/><use width="30" height="20" transform="matrix(14.9991 -18.73557 18.73533 14.99929 240 216)" xlink:href="#a"/></svg>`;
+        const SVG_UZ = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" id="flag-icon-css-uz" viewBox="0 0 640 480"><path fill="#1eb53a" d="M0 320h640v160H0z"/><path fill="#0099b5" d="M0 0h640v160H0z"/><path fill="#ce1126" d="M0 153.6h640v172.8H0z"/><path fill="#fff" d="M0 163.2h640v153.6H0z"/><circle cx="134.4" cy="76.8" r="57.6" fill="#fff"/><circle cx="153.6" cy="76.8" r="57.6" fill="#0099b5"/><g fill="#fff" transform="matrix(1.92 0 0 1.92 261.1 122.9)"><g id="e"><g id="d"><g id="c"><g id="b"><path id="a" d="M0-6L-1.9-.3 1 .7"/><use width="100%" height="100%" transform="scale(-1 1)" xlink:href="#a"/></g><use width="100%" height="100%" transform="rotate(72)" xlink:href="#b"/></g><use width="100%" height="100%" transform="rotate(-72)" xlink:href="#b"/><use width="100%" height="100%" transform="rotate(144)" xlink:href="#c"/></g><use width="100%" height="100%" y="-24" xlink:href="#d"/><use width="100%" height="100%" y="-48" xlink:href="#d"/></g><use width="100%" height="100%" x="24" xlink:href="#e"/><use width="100%" height="100%" x="48" xlink:href="#e"/><use width="100%" height="100%" x="-48" xlink:href="#d"/><use width="100%" height="100%" x="-24" xlink:href="#d"/><use width="100%" height="100%" x="-24" y="-24" xlink:href="#d"/></g></svg>`;
+
+        const LANG_DATA = [
+            { code: 'RU', name: 'Русский', flag: makeSvgDataUri(SVG_RU) },
+            { code: 'EN', name: 'English', flag: makeSvgDataUri(SVG_GB) },
+            { code: 'CN', name: '中文', flag: makeSvgDataUri(SVG_CN) },
+            { code: 'UZ', name: "O'zbekcha", flag: makeSvgDataUri(SVG_UZ) }
+        ];
+
+        let currentLangCode = 'RU';
+
+        function renderLangMenu() {
+            const menuEl = document.getElementById('lang-menu');
+            menuEl.innerHTML = LANG_DATA.map(item => `
+                <div class="lang-item ${item.code === currentLangCode ? 'active' : ''}" onclick="selectLanguage('${item.code}')">
+                    <img src="${item.flag}" class="flag-icon" alt="${item.code}">
+                    <span>${item.name} (${item.code})</span>
+                </div>
+            `).join('');
+
+            const selected = LANG_DATA.find(l => l.code === currentLangCode) || LANG_DATA[0];
+            document.getElementById('selected-flag-img').src = selected.flag;
+            document.getElementById('selected-lang-code').innerText = selected.code;
+        }
+
+        function toggleLangMenu(event) {
+            event.stopPropagation();
+            const menu = document.getElementById('lang-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        function selectLanguage(code) {
+            const langObj = LANG_DATA.find(l => l.code === code);
+            if (!langObj) return;
+            currentLangCode = code;
+            document.getElementById('selected-flag-img').src = langObj.flag;
+            document.getElementById('selected-lang-code').innerText = langObj.code;
+            document.getElementById('lang-menu').classList.add('hidden');
+            renderLangMenu();
+        }
+
+        function toggleUserMenu(event) {
+            event.stopPropagation();
+            const userMenu = document.getElementById('user-menu');
+            if (userMenu) {
+                userMenu.classList.toggle('hidden');
+            }
+        }
+
+        function logoutApp() {
+            if (window.Telegram && window.Telegram.WebApp) {
+                window.Telegram.WebApp.close();
+            } else {
+                window.close();
+            }
+        }
+
+        document.addEventListener('click', function (e) {
+            const wrapper = document.querySelector('.lang-dropdown-wrapper');
+            if (wrapper && !wrapper.contains(e.target)) {
+                document.getElementById('lang-menu').classList.add('hidden');
+            }
+            const userWrapper = document.querySelector('.user-profile-wrapper');
+            if (userWrapper && !userWrapper.contains(e.target)) {
+                const userMenu = document.getElementById('user-menu');
+                if (userMenu) userMenu.classList.add('hidden');
+            }
+        });
+
+        let activeCancelRegId = null;
+
+        let appData = {
+            sections: [],
+            registration: null,
+            state: {
+                sectionId: null,
+                dayId: null,
+                selectedTeacherId: null,
+                selectedPairNum: null,
+                slotId: null
+            }
+        };
+
+        const moonSvg = `<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-2.98 0-5.4-2.42-5.4-5.4 0-1.81.89-3.42 2.26-4.4C12.92 3.04 12.46 3 12 3z"></path></svg>`;
+        const sunSvg = `<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 9c1.65 0 3 1.35 3 3s-1.35 3-3 3-3-1.35-3-3 1.35-3 3-3m0-2c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5M2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1m18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1M11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1m0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1M5.99 4.58c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41zm12.37 12.37c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0 .39-.39.39-1.03 0-1.41zm1.06-10.96c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0zM7.05 18.36c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39.39 1.03 0 1.41s1.03.39 1.41 0z"></path></svg>`;
+
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', newTheme);
+            document.getElementById('theme-toggle-btn').innerHTML = newTheme === 'dark' ? sunSvg : moonSvg;
+        }
+
+        function openAvatarModal(src) {
+            if (!src) return;
+            document.getElementById('avatarFullImg').src = src;
+            document.getElementById('avatarModal').classList.remove('hidden');
+        }
+
+        function closeAvatarModal() {
+            document.getElementById('avatarModal').classList.add('hidden');
+        }
+
+        function openCancelModal(registrationId) {
+            activeCancelRegId = registrationId;
+            document.getElementById('cancelModal').classList.remove('hidden');
+        }
+
+        function closeCancelModal() {
+            activeCancelRegId = null;
+            document.getElementById('cancelModal').classList.add('hidden');
+        }
+
+        async function confirmCancellation() {
+            if (!activeCancelRegId) return;
+            try {
+                const response = await fetch(`/api/cancel?tg_id=${tgId}&registration_id=${activeCancelRegId}`, { method: 'POST' });
+                if (response.ok) {
+                    closeCancelModal();
+                    window.location.reload();
+                } else {
+                    const data = await response.json();
+                    alert(data.error || 'Не удалось отменить запись');
+                }
+            } catch (e) {
+                alert('Произошла ошибка при связи с сервером');
+            }
+
+            showToast('Запись отменена', 'Ваша запись была удалена');
+
+        }
+
+        function toggleText(elementId, btn) {
+            const content = document.getElementById(elementId);
+            if (!content) return;
+            const isCollapsed = content.classList.contains('text-collapsed');
+
+            if (isCollapsed) {
+                content.classList.remove('text-collapsed');
+                btn.textContent = 'Скрыть';
+            } else {
+                content.classList.add('text-collapsed');
+                btn.textContent = 'Показать полностью';
+            }
+        }
+
+        function formatShortName(fullNameOrObj) {
+            let surname = '', name = '', patronymic = '';
+            if (typeof fullNameOrObj === 'object' && fullNameOrObj !== null) {
+                surname = fullNameOrObj.SURNAME || fullNameOrObj.LAST_NAME || fullNameOrObj.surname || fullNameOrObj.last_name || '';
+                name = fullNameOrObj.NAME || fullNameOrObj.FIRST_NAME || fullNameOrObj.name || fullNameOrObj.first_name || '';
+                patronymic = fullNameOrObj.PATRONYMIC || fullNameOrObj.MIDDLE_NAME || fullNameOrObj.patronymic || fullNameOrObj.middle_name || '';
+            } else if (typeof fullNameOrObj === 'string') {
+                const parts = fullNameOrObj.trim().split(/\s+/);
+                surname = parts[0] || '';
+                name = parts[1] || '';
+                patronymic = parts[2] || '';
+            }
+
+            if (!surname) return 'Преподаватель';
+            let res = surname;
+            if (name) res += ` ${name[0].toUpperCase()}.`;
+            if (patronymic) res += ` ${patronymic[0].toUpperCase()}.`;
+            return res;
+        }
+
+        function formatFullName(teacherObj) {
+            if (!teacherObj) return 'Преподаватель';
+            const surname = teacherObj.SURNAME || teacherObj.LAST_NAME || '';
+            const name = teacherObj.NAME || teacherObj.FIRST_NAME || '';
+            const patronymic = teacherObj.PATRONYMIC || teacherObj.MIDDLE_NAME || '';
+            return `${surname} ${name} ${patronymic}`.trim() || 'Преподаватель';
+        }
+
+        function formatStudentShortName(st) {
+            if (!st || typeof st !== 'object') return 'Студент';
+
+            const surname = String(st.SURNAME || st.surname || '').trim();
+            const name = String(st.NAME || st.name || '').trim();
+            const patronymic = String(st.PATRONYMIC || st.patronymic || '').trim();
+
+            if (surname) {
+                let res = surname;
+                if (name) res += ` ${name[0].toUpperCase()}.`;
+                if (patronymic) res += ` ${patronymic[0].toUpperCase()}.`;
+                return res;
+            }
+
+            return 'Студент';
+        }
+
+        function normalizeSectionsData(apiResult) {
+            let rawSections = [];
+
+            if (Array.isArray(apiResult)) {
+                rawSections = apiResult;
+            } else if (apiResult && typeof apiResult === 'object') {
+                if (Array.isArray(apiResult.SECTION)) {
+                    rawSections = apiResult.SECTION;
+                } else if (Array.isArray(apiResult.SECTIONS)) {
+                    rawSections = apiResult.SECTIONS;
+                } else if (Array.isArray(apiResult.sections)) {
+                    rawSections = apiResult.sections;
+                } else if (Array.isArray(apiResult.PAID_SECTIONS) || Array.isArray(apiResult.FREE_SECTIONS)) {
+                    rawSections = [...(apiResult.PAID_SECTIONS || []), ...(apiResult.FREE_SECTIONS || [])];
+                } else if (Array.isArray(apiResult.data)) {
+                    rawSections = apiResult.data;
+                } else {
+                    Object.values(apiResult).forEach(val => {
+                        if (Array.isArray(val)) rawSections.push(...val);
+                    });
+                }
+            }
+
+            rawSections = rawSections.filter(section => {
+                const secTitle = section.TITLE || section.NAME || section.SECTION_NAME || '';
+                return secTitle && secTitle.trim().toLowerCase() !== 'виктор';
+            });
+
+            return rawSections.map(sec => {
+                const secId = String(sec.ID || sec.SECTION_ID || sec.id || '');
+                const secTitle = sec.TITLE || sec.NAME || sec.SECTION_NAME || 'Секция';
+                const priceVal = sec.PRICE_PER_SEMESTER ?? sec.PRICE ?? sec.COST ?? (sec.IS_PAID ? 600 : 0);
+
+                const slots = [];
+                const teachersMapOrdered = [];
+
+                function addSlot(dayNum, lessonNum, start, end, teacherObj, places) {
+                    if (dayNum === undefined || dayNum === null || dayNum === '') return;
+                    const d = Number(dayNum);
+                    const l = Number(lessonNum || 1);
+                    const tId = Number(teacherObj?.ID_CARD || teacherObj?.ID || teacherObj?.TEACHER_ID || teacherObj?.id || 0);
+
+                    const tName = formatShortName(teacherObj);
+                    const tPost = teacherObj?.POST || 'Преподаватель';
+                    const tPhoto = teacherObj?.PHOTO || '';
+                    const tEmail = teacherObj?.EMAIL || '';
+
+                    if (tId && !teachersMapOrdered.some(t => t.id === tId)) {
+                        teachersMapOrdered.push({
+                            id: tId,
+                            name: tName,
+                            fullName: formatFullName(teacherObj),
+                            post: tPost,
+                            photo: tPhoto,
+                            email: tEmail,
+                            rawTeacher: teacherObj
+                        });
+                    }
+
+                    const timeInfo = LESSON_TIMES[l] || { start: start ? String(start).slice(0, 5) : '08:30', end: end ? String(end).slice(0, 5) : '10:00' };
+
+                    slots.push({
+                        dayNumber: d,
+                        lessonNumber: l,
+                        startTime: timeInfo.start,
+                        endTime: timeInfo.end,
+                        teacherId: tId,
+                        teacherName: tName,
+                        teacherPost: tPost,
+                        teacherPhoto: tPhoto,
+                        freePlaces: places !== undefined ? Number(places) : 0,
+                        rawTeacher: teacherObj
+                    });
+                }
+
+                const daysList = sec.AVAILABLE_DAYS || sec.DAYS || sec.SCHEDULE || [];
+                if (Array.isArray(daysList)) {
+                    daysList.forEach(item => {
+                        const dayNum = item.NUMBER ?? item.DAY_NUMBER ?? item.DAY ?? item.DAY_NUM;
+
+                        if (Array.isArray(item.TEACHERS)) {
+                            item.TEACHERS.forEach(t => {
+                                const lessons = t.LESSONS || t.SCHEDULE || [];
+                                if (Array.isArray(lessons)) {
+                                    lessons.forEach(les => {
+                                        const lesNum = les.PAIR_NUMBER ?? les.NUMBER ?? les.LESSON_NUMBER ?? les.PAIR;
+                                        const start = les.START_TIME || les.TIME_START;
+                                        const end = les.FINISH_TIME || les.TIME_END;
+                                        const places = les.AVAILABLE_PLACES ?? les.FREE_PLACES ?? les.PLACES;
+                                        addSlot(dayNum, lesNum, start, end, t, places);
+                                    });
+                                }
+                            });
+                        } else if (Array.isArray(item.LESSONS)) {
+                            item.LESSONS.forEach(les => {
+                                const lesNum = les.PAIR_NUMBER ?? les.NUMBER ?? les.LESSON_NUMBER ?? les.PAIR;
+                                const start = les.START_TIME || les.TIME_START;
+                                const end = les.FINISH_TIME || les.TIME_END;
+                                if (Array.isArray(les.TEACHERS)) {
+                                    les.TEACHERS.forEach(t => addSlot(dayNum, lesNum, start, end, t, t.AVAILABLE_PLACES ?? les.AVAILABLE_PLACES));
+                                } else {
+                                    addSlot(dayNum, lesNum, start, end, les.TEACHER || item.TEACHER, les.AVAILABLE_PLACES ?? les.FREE_PLACES);
+                                }
+                            });
+                        }
+                    });
+                }
+
+                const teachersList = sec.TEACHERS || sec.teachers || [];
+                if (Array.isArray(teachersList)) {
+                    teachersList.forEach(t => {
+                        const lessons = t.LESSONS || t.SCHEDULE || t.DAYS || [];
+                        if (Array.isArray(lessons)) {
+                            lessons.forEach(l => {
+                                const dayNum = l.DAY_NUMBER ?? l.DAY ?? l.DAY_NUM ?? l.NUMBER;
+                                const lesNum = l.PAIR_NUMBER ?? l.LESSON_NUMBER ?? l.NUMBER ?? l.PAIR;
+                                const start = l.START_TIME || l.TIME_START;
+                                const end = l.FINISH_TIME || l.TIME_END;
+                                const places = l.AVAILABLE_PLACES ?? l.FREE_PLACES ?? l.PLACES;
+                                addSlot(dayNum, lesNum, start, end, t, places);
+                            });
+                        }
+                    });
+                }
+
+                const directSlots = sec.SLOTS || sec.slots || [];
+                if (Array.isArray(directSlots)) {
+                    directSlots.forEach(s => {
+                        addSlot(s.DAY_NUMBER || s.dayNumber || s.NUMBER, s.PAIR_NUMBER || s.LESSON_NUMBER || s.lessonNumber || s.NUMBER || s.PAIR, s.START_TIME || s.startTime, s.FINISH_TIME || s.endTime, s.TEACHER || s, s.AVAILABLE_PLACES ?? s.freePlaces);
+                    });
+                }
+
+                teachersMapOrdered.sort((a, b) => a.fullName.localeCompare(b.fullName, 'ru'));
+
+                return {
+                    ...sec,
+                    id: secId,
+                    ID: secId,
+                    NAME: secTitle,
+                    PRICE_PER_SEMESTER: priceVal,
+                    slots: slots,
+                    teachersOrdered: teachersMapOrdered
+                };
+            });
+        }
+
+        function getSelectedSection() {
+            return appData.sections.find(s => String(s.id || s.ID) === String(appData.state.sectionId));
+        }
+
+        async function init() {
+            if (window.Telegram && window.Telegram.WebApp) {
+                window.Telegram.WebApp.ready();
+            }
+
+            if (typeof renderLangMenu === 'function') {
+                renderLangMenu();
+            }
+
+            try {
+                const res = await fetch(`${API_BASE_URL}/api/sections?tg_id=${tgId}`);
+                if (!res.ok) throw new Error(`Server error: ${res.status}`);
+
+                const data = await res.json();
+                if (data && data.error) throw new Error(data.error);
+
+                const rawUserInfo = data.USER_INFO;
+                const st = Array.isArray(rawUserInfo) ? (rawUserInfo[0] || {}) : (rawUserInfo || {});
+
+                const surname = String(st.SURNAME || st.surname || st.LAST_NAME || st.last_name || '').trim();
+                const name = String(st.NAME || st.name || st.FIRST_NAME || st.first_name || '').trim();
+                const patronymic = String(st.PATRONYMIC || st.patronymic || st.MIDDLE_NAME || st.middle_name || '').trim();
+
+                let fullFio = [surname, name, patronymic].filter(Boolean).join(' ');
+
+                let formattedShortName = typeof formatStudentShortName === 'function'
+                    ? formatStudentShortName(st)
+                    : '';
+
+                const defaultNames = ['', 'Студент', 'Пользователь', 'Загрузка...'];
+
+                if (defaultNames.includes(formattedShortName)) {
+                    if (surname && name) {
+                        formattedShortName = `${surname} ${name[0]}.` + (patronymic ? ` ${patronymic[0]}.` : '');
+                    } else if (fullFio) {
+                        formattedShortName = fullFio;
+                    } else {
+                        formattedShortName = st.USERNAME || st.login || 'Студент НГТУ';
+                        fullFio = formattedShortName;
+                    }
+                }
+
+                const elementsToUpdate = {
+                    'user-name': formattedShortName,
+                    'menu-user-name': formattedShortName,
+                    'user-role': 'Студент',
+                    'menu-user-status': 'Студент'
+                };
+
+                Object.entries(elementsToUpdate).forEach(([id, val]) => {
+                    const el = document.getElementById(id);
+                    if (el) el.innerText = val;
+                });
+
+                let avatarUrl = st.PHOTO_PATH || st.photo_path || st.PHOTO || st.photo || '';
+                const studentId = st.ID || st.id || st.ID_STUDENT;
+
+                if (!avatarUrl && studentId) {
+                    avatarUrl = `https://api.ciu.nstu.ru/v2.0/student/photo/${studentId}`;
+                }
+
+                const userAvatarEl = document.getElementById('user-avatar');
+                const userInitialsEl = document.getElementById('user-initials');
+
+                const initialsText = surname && name ? (surname[0] + name[0]).toUpperCase() : 'СТ';
+
+                if (avatarUrl && userAvatarEl) {
+                    userAvatarEl.src = avatarUrl;
+                    userAvatarEl.style.display = 'block';
+                    if (userInitialsEl) userInitialsEl.style.display = 'none';
+
+                    userAvatarEl.onerror = function () {
+                        this.style.display = 'none';
+                        if (userInitialsEl) {
+                            userInitialsEl.style.display = 'flex';
+                            userInitialsEl.innerText = initialsText;
+                        }
+                    };
+                } else if (userInitialsEl) {
+                    if (userAvatarEl) userAvatarEl.style.display = 'none';
+                    userInitialsEl.style.display = 'flex';
+                    userInitialsEl.innerText = initialsText;
+                }
+
+                appData.registration = data.MY_REGISTRATION || data.REGISTRATION;
+                appData.sections = typeof normalizeSectionsData === 'function' ? normalizeSectionsData(data) : [];
+
+                const loaderEl = document.getElementById('loader');
+                const mainContentEl = document.getElementById('main-content');
+
+                if (loaderEl) loaderEl.style.display = 'none';
+                if (mainContentEl) mainContentEl.style.display = 'block';
+
+                if (appData.registration && Object.keys(appData.registration).length > 0) {
+                    renderActiveRegistration();
+                } else {
+                    renderBookingForm();
+                }
+
+            } catch (err) {
+                const loaderEl = document.getElementById('loader');
+                if (loaderEl) loaderEl.innerText = "Ошибка загрузки: " + err.message;
+            }
+        }
+
+        function renderBookingForm() {
+            const container = document.getElementById('main-content');
+            if (!container) return;
+
+            const isSectionSelected = Boolean(appData.state.sectionId);
+
+            const paidOrder = ['плавание', 'настольный теннис', 'волейбол', 'баскетбол', 'крав-мага'];
+            const freeOrder = ['лёгкая атлетика', 'футбол'];
+
+            const getOrderIndex = (name, list) => {
+                const lname = (name || '').toLowerCase();
+                const idx = list.findIndex(item => lname.includes(item));
+                return idx === -1 ? 99 : idx;
+            };
+
+            const paidSections = appData.sections
+                .filter(s => Number(s.PRICE_PER_SEMESTER || 0) > 0)
+                .sort((a, b) => getOrderIndex(a.NAME || a.name, paidOrder) - getOrderIndex(b.NAME || b.name, paidOrder));
+
+            const freeSections = appData.sections
+                .filter(s => Number(s.PRICE_PER_SEMESTER || 0) === 0)
+                .sort((a, b) => getOrderIndex(a.NAME || a.name, freeOrder) - getOrderIndex(b.NAME || b.name, freeOrder));
+
+            let sectionsStepHtml = '';
+
+            if (isSectionSelected) {
+                const selectedSec = getSelectedSection();
+                sectionsStepHtml = `
+                    <h2 class="step-title">1. Направление</h2>
+                    <div class="step-subtitle">Выбранное направление:</div>
+                    
+                    <div class="radio-grid">${selectedSec ? renderSectionRadio(selectedSec) : ''}</div>
+                `;
+            } else {
+                const paidRadios = paidSections.map(s => renderSectionRadio(s)).join('');
+                const freeRadios = freeSections.map(s => renderSectionRadio(s)).join('');
+
+                sectionsStepHtml = `
+                    <h2 class="step-title">1. Направление</h2>
+                    <div class="step-subtitle">Выберите понравившееся направление</div>
+                    
+                    ${paidSections.length > 0 ? `
+                        <div class="price-category">Платные, 600 ₽ / семестр</div>
+                        <div class="radio-grid">${paidRadios}</div>
+                    ` : ''}
+
+                    ${freeSections.length > 0 ? `
+                        <div class="price-category" style="margin-top: 20px;">Бесплатные</div>
+                        <div class="radio-grid">${freeRadios}</div>
+                    ` : ''}
+
+                    <div class="disclaimer-text">
+                        Обращаем внимание, что занятия в секциях начальной спортивной подготовки по атлетизму, настольному теннису, плаванию, фит-аэробике, крав-мага, волейболу и баскетболу проводятся в рамках платных дополнительных образовательных программ (<a href="https://ciu.nstu.ru/student_study/files/sport/doc-1-6.pdf" target="_blank" rel="noopener noreferrer" class="teacher-link">договор-оферта</a>). Занятия в этих секциях засчитываются как учебные при условии сдачи контрольных и зачетных требований.
+                    </div>
+                `;
+            }
+
+            const daysStepHtml = renderDaysStep();
+            const teachersStepHtml = renderTeachersStep();
+
+            const isSubmitDisabled = !(
+                appData.state.sectionId &&
+                appData.state.dayId &&
+                appData.state.selectedTeacherId &&
+                appData.state.selectedPairNum
+            );
+
+            container.innerHTML = `
+                <div class="top-info">
+                    <div>
+                        <h1 class="page-title">Запись на физкультуру</h1>
+                        <div class="health-group">Ваша группа по здоровью: Основная</div>
+                    </div>
+                    <div class="deadline-badge">
+                        Необходимо записаться до <span class="deadline-badge-date">8 сентября 2026, 23:59</span> <!-- Менять дату в зависимости от семестра, а также год -->
+                    </div>
+                </div>
+
+                <div class="main-card">
+                    <div class="step-section">
+                        ${sectionsStepHtml}
+                    </div>
+
+                    <div class="step-section">
+                        ${daysStepHtml}
+                    </div>
+
+                    <div class="step-section">
+                        ${teachersStepHtml}
+                    </div>
+                </div>
+
+                <div class="action-card">
+                    <button type="button" class="btn-submit" id="btn-submit" ${isSubmitDisabled ? 'disabled' : ''} onclick="openConfirmModal()">
+                        Записаться
+                    </button>
+                </div>
+            `;
+        }
+
+        function renderSectionRadio(sec) {
+
+            const id = String(sec.ID || sec.id);
+            const isChecked = String(appData.state.sectionId) === id;
+
+            return `
+                <label class="radio-item">
+                    <input type="radio" name="section" value="${id}" ${isChecked ? 'checked' : ''} onclick="selectSection('${id}')">
+                    <div class="custom-radio"></div>
+                    <div class="radio-content">
+                        <span class="radio-title">${sec.NAME || sec.name}</span>
+                        <a href="#" class="radio-link" onclick="event.preventDefault(); openInfoModal('${id}');">Подробнее</a>
+                    </div>
+                </label>
+            `;
+
+        }
+
+        function openInfoModal(sectionId) {
+            const sec = appData.sections.find(s => String(s.id || s.ID) === String(sectionId));
+            if (!sec) return;
+
+            const modalContent = document.getElementById('info-modal-content');
+            let detailsHtml = '';
+            let contactsPhraseHtml = '';
+            const name = sec.NAME || sec.name || '';
+            const lowerName = name.toLowerCase();
+
+            if (lowerName.includes('теннис')) {
+                detailsHtml = `
+    <p><strong>О специализации:</strong><br>
+    на занятиях ФК по специализации «Настольный теннис» Вы:<br>
+    - получите представление о настольном теннисе как о виде спорта, знания по судейству и опыт участия в соревнованиях внутри учебных групп;<br>
+    - усовершенствуете навыки игры в настольный теннис;<br>
+    - повысите уровень физической подготовленности по основным физическим качествам средствами настольного тенниса.</p>
+    <p><strong>Место занятий:</strong> проспект Карла Маркса 35/1, Спортивный комплекс НГТУ, зал фехтования к. 101.</p>
+    <p><strong>Требования к компетенциям и особенности записи:</strong><br>
+    Для записи вам необходимы минимальные навыки игры в настольный теннис и отсутствие противопоказаний к занятиям данным видом спорта.<br><br>
+    Специализация «Настольный теннис» является дополнительным видом физкультурной направленности, которая предусматривает оплату за семестр.<br>
+    <a href="https://www.nstu.ru/static_files/63323/NSTU_stoimost_uslug_UCFK_2020_2021.pdf" target="_blank" rel="noopener noreferrer" class="teacher-link">https://www.nstu.ru/static_files/63323/NSTU_stoimost_uslug_UCFK_2020_2021.pdf</a></p>
+    <p><strong>Преподаватели:</strong><br>
+    <em>доцент <a href="https://ciu.nstu.ru/kaf/persons/2948/about" target="_blank" class="teacher-link">Сулейманов Камиль Ахметович</a> (<a href="mailto:sulejmanov@corp.nstu.ru" class="teacher-link">sulejmanov@corp.nstu.ru</a>)<br>
+    ст. преподаватель <a href="https://ciu.nstu.ru/kaf/persons/2925/about" target="_blank" class="teacher-link">Гречанов Пётр Борисович</a> (<a href="mailto:grechanov@corp.nstu.ru" class="teacher-link">grechanov@corp.nstu.ru</a>)<br>
+    ст. преподаватель <a href="https://ciu.nstu.ru/kaf/persons/2949/about" target="_blank" class="teacher-link">Сурнов Владимир Петрович</a> (<a href="mailto:surnov@corp.nstu.ru" class="teacher-link">surnov@corp.nstu.ru</a>)</em></p>
+`;
+                contactsPhraseHtml = 'По всем вопросам обращаться к руководителю отделения: ст. преподаватель <a href="https://ciu.nstu.ru/kaf/persons/20436/about" target="_blank" class="teacher-link">Гусева Марина Анатольевна</a><br><a href="mailto:m.guseva@corp.nstu.ru" class="teacher-link">m.guseva@corp.nstu.ru</a>';
+            } else if (lowerName.includes('волейбол')) {
+                detailsHtml = `
+    <p><strong>О специализации:</strong><br>
+    на занятиях ФК по специализации «Волейбол» Вы:<br>
+    - получите представление о волейболе как о виде спорта, знания по основам занятий данным видом спорта, навыки по судейству.<br>
+    - усовершенствуете навыки игры в волейбол;<br>
+    - повысите уровень физической подготовленности по основным физическим качествам средствами волейбола.</p>
+    <p><strong>Место занятий:</strong> Блюхера 34, Дворец спорта НГТУ, игровая площадка (волейбольная).</p>
+    <p><strong>Требования к компетенциям и особенности записи:</strong><br>
+    Для записи вам необходимы минимальные навыки игры в волейбол и огромное желание научится. Специализация «Волейбол» является дополнительным видом физкультурной направленности, которая предусматривает оплату за семестр.<br>
+    <a href="https://www.nstu.ru/static_files/63323/NSTU_stoimost_uslug_UCFK_2020_2021.pdf" target="_blank" rel="noopener noreferrer" class="teacher-link">https://www.nstu.ru/static_files/63323/NSTU_stoimost_uslug_UCFK_2020_2021.pdf</a></p>
+    <p><strong>Преподаватели:</strong><br>
+    <em>ст. преподаватель <a href="https://ciu.nstu.ru/kaf/persons/20436/about" target="_blank" class="teacher-link">Гусева Марина Анатольевна</a> (руководитель отделения) (<a href="mailto:m.guseva@corp.nstu.ru" class="teacher-link">m.guseva@corp.nstu.ru</a>)<br>
+    зав.каф.ФВ <a href="https://ciu.nstu.ru/kaf/persons/2956/about" target="_blank" class="teacher-link">Климов Владимир Михайлович</a> (<a href="mailto:v.klimov@corp.nstu.ru" class="teacher-link">v.klimov@corp.nstu.ru</a>)</em></p>
+`;
+                contactsPhraseHtml = 'По всем вопросам обращаться к руководителю отделения!';
+            } else if (lowerName.includes('баскетбол')) {
+                detailsHtml = `
+    <p><strong>О специализации:</strong><br>
+    на занятиях ФК по специализации «Баскетбол» Вы:<br>
+    - получите представление о баскетболе как о виде спорта, знания по основам судейства;<br>
+    - усовершенствуете навыки игры в баскетбол;<br>
+    - повысите уровень физической подготовленности по основным физическим качествам средствами баскетбола.</p>
+    <p><strong>Место занятий:</strong> Блюхера 34, Дворец спорта НГТУ, игровая площадка (баскетбольная).</p>
+    <p><strong>Требования к компетенциям и особенности записи:</strong><br>
+    Студент должен обладать минимальными знаниями и умениями игры в баскетбол. Специализация «Баскетбол» является дополнительным видом физкультурной направленности, которая предусматривает оплату за семестр.<br>
+    <a href="https://www.nstu.ru/static_files/63323/NSTU_stoimost_uslug_UCFK_2020_2021.pdf" target="_blank" rel="noopener noreferrer" class="teacher-link">https://www.nstu.ru/static_files/63323/NSTU_stoimost_uslug_UCFK_2020_2021.pdf</a></p>
+    <p><strong>Преподаватели:</strong><br>
+    <em>ст. преподаватель <a href="https://ciu.nstu.ru/kaf/persons/22213/about" target="_blank" class="teacher-link">Герасимов Константин Александрович</a> (<a href="mailto:k.gerasimov@corp.nstu.ru" class="teacher-link">k.gerasimov@corp.nstu.ru</a>)</em></p>
+`;
+                contactsPhraseHtml = 'По всем вопросам обращаться к преподавателю по корпоративной почте!';
+            } else if (lowerName.includes('плаван')) {
+                detailsHtml = `
+    <p><strong>О специализации:</strong><br>
+    на занятиях ФК по специализации «Плавание» Вы:<br>
+    - получите представление о плавании как о виде спорта, знания по технике безопасности в бассейнe;<br>
+    - сформируете навыки техники различных видов плавания (брасс, кроль и др.);<br>
+    - повысите уровень физической подготовленности по основным физическим качествам средствами плавания.</p>
+    <p><strong>Место занятий:</strong> проспект Карла Маркса 35/1, Спортивный комплекс НГТУ, бассейн.</p>
+    <p><strong>Требования к компетенциям и особенности записи:</strong><br>
+    Особых требований к компетенциям занимающихся нет. Если вы плавать не умеете, вам необходимо это отметить при записи.<br>
+    Отделение «Плавание» является дополнительным видом физкультурной направленности, которая предусматривает оплату за семестр, исключение составляет пара на 8.30, она является бесплатной!<br><br>
+    <a href="https://www.nstu.ru/static_files/63323/NSTU_stoimost_uslug_UCFK_2020_2021.pdf" target="_blank" rel="noopener noreferrer" class="teacher-link">https://www.nstu.ru/static_files/63323/NSTU_stoimost_uslug_UCFK_2020_2021.pdf</a></p>
+    <p><strong>Преподаватели:</strong><br>
+    <em>ст. преподаватель <a href="https://ciu.nstu.ru/kaf/persons/2922/about" target="_blank" class="teacher-link">Васильева Ирина Анатольевна</a> (руководитель отделения) (<a href="mailto:i.vasileva@corp.nstu.ru" class="teacher-link">i.vasileva@corp.nstu.ru</a>)<br>
+    ст. преподаватель <a href="https://ciu.nstu.ru/kaf/persons/2927/about" target="_blank" class="teacher-link">Герасимов Сергей Николаевич</a> (<a href="mailto:gerasimov@corp.nstu.ru" class="teacher-link">gerasimov@corp.nstu.ru</a>)<br>
+    ст. преподаватель <a href="https://ciu.nstu.ru/kaf/persons/36185/about" target="_blank" class="teacher-link">Ходакова Татьяна Аркадьевна</a> (<a href="mailto:xodakova@corp.nstu.ru" class="teacher-link">xodakova@corp.nstu.ru</a>)<br>
+    ст. преподаватель <a href="https://ciu.nstu.ru/kaf/persons/2958/about" target="_blank" class="teacher-link">Опарина Людмила Анатольевна</a> (<a href="mailto:oparina@corp.nstu.ru" class="teacher-link">oparina@corp.nstu.ru</a>)<br>
+    ст. преподаватель <a href="https://ciu.nstu.ru/kaf/persons/2959/about" target="_blank" class="teacher-link">Зырянова Альмира Каримовна</a> (<a href="mailto:zyryanova@corp.nstu.ru" class="teacher-link">zyryanova@corp.nstu.ru</a>)<br>
+    ст. преподаватель <a href="https://ciu.nstu.ru/kaf/persons/2955/about" target="_blank" class="teacher-link">Зуева Марина Викторовна</a> (<a href="mailto:zueva@corp.nstu.ru" class="teacher-link">zueva@corp.nstu.ru</a>)<br>
+    ст. преподаватель <a href="https://ciu.nstu.ru/kaf/persons/2925/about" target="_blank" class="teacher-link">Гречанов Пётр Борисович</a> (<a href="mailto:grechanov@corp.nstu.ru" class="teacher-link">grechanov@corp.nstu.ru</a>)<br>
+    ст. преподаватель <a href="https://ciu.nstu.ru/kaf/persons/2939/about" target="_blank" class="teacher-link">Макарова Виктория Николаевна</a> (<a href="mailto:makarova@corp.nstu.ru" class="teacher-link">makarova@corp.nstu.ru</a>)<br>
+    ст. преподаватель <a href="https://ciu.nstu.ru/kaf/persons/2934/about" target="_blank" class="teacher-link">Кернер Валентина Робертовна</a> (<a href="mailto:kerner@corp.nstu.ru" class="teacher-link">kerner@corp.nstu.ru</a>)<br>
+    ст. преподаватель <a href="https://ciu.nstu.ru/kaf/persons/3161/about" target="_blank" class="teacher-link">Попелюх Вера Павловна</a> (<a href="mailto:v.popelyux@corp.nstu.ru" class="teacher-link">v.popelyux@corp.nstu.ru</a>)<br>
+    ст. преподаватель <a href="https://ciu.nstu.ru/kaf/persons/85923/about" target="_blank" class="teacher-link">Приходько Антон Юрьевич</a> (<a href="mailto:a.yu.prixodko@corp.nstu.ru" class="teacher-link">a.yu.prixodko@corp.nstu.ru</a>)</em></p>
+`;
+                contactsPhraseHtml = 'По всем вопросам обращаться к руководителю отделения!';
+            } else if (lowerName.includes('крав') || lowerName.includes('мага')) {
+                detailsHtml = `
+    <p><strong>О специализации:</strong><br>
+    на занятиях ФК по специализации самооборона и рукопашный бой «Крав-мага» Вы:<br>
+    - получите представление о личной безопасности, разберёте типовые ситуации, связанные с нападением одного и группы вооружённых и не вооружённых агрессоров, с которыми вы можете столкнуться на улице;<br>
+    - сформируете навыки ударной техники (руками, ногами, локтями, коленями), освоите приёмы самозащиты от атак и угроз ножом, защиты от захватов (за руки, одежду и волосы) в различных положениях (спереди, сбоку, сзади; сидя, стоя, лёжа);<br>
+    - приобретёте психологическую уверенность в себе, сформируете навыки уверенного поведения в конфликтных ситуациях.</p>
+    <p><strong>Место занятий:</strong> К. Маркса, 20, Спортивный комплекс «Богатырь», зал 209 (зал борьбы).</p>
+    <p><strong>Требования к компетенциям и особенности записи:</strong><br>
+    У вас должна быть основная медицинская группа, не должно быть противопоказаний к кувыркам и падениям.<br><br>
+    Специализация «Крав-мага» является дополнительным видом физкультурной направленности, которая предусматривает оплату за семестр.<br>
+    <a href="https://www.nstu.ru/static_files/63323/NSTU_stoimost_uslug_UCFK_2020_2021.pdf" target="_blank" rel="noopener noreferrer" class="teacher-link">https://www.nstu.ru/static_files/63323/NSTU_stoimost_uslug_UCFK_2020_2021.pdf</a><br><br>
+    Для более глубокого понимания предмета рекомендуем ознакомиться с <a href="https://elibrary.nstu.ru/source?id=79586" target="_blank" class="teacher-link">пособием</a> Зуев П. Е., Пересадина Е. Е., Кокшаров М. И. Физическая культура. Крав-мага.</p>
+    <p><strong>Преподаватели:</strong><br>
+    <em>ст. преподаватель <a href="https://ciu.nstu.ru/kaf/persons/22130/about" target="_blank" class="teacher-link">Зуев Павел Евгеньевич</a> (<a href="mailto:zuev@corp.nstu.ru" class="teacher-link">zuev@corp.nstu.ru</a>)</em></p>
+`;
+                contactsPhraseHtml = '';
+            } else if (lowerName.includes('атлетик') || lowerName.includes('легк')) {
+                detailsHtml = `
+    <p><strong>О специализации:</strong><br>
+    на занятиях ФК по специализации «Лёгкая атлетика» Вы:<br>
+    - получите представление о легкой атлетике как о виде спорта, знания по основам занятий данным видом спорта, навыки по организации самостоятельных занятий, а также по некоторым практическим вопросам общей теории ФК и С;<br>
+    - сформируете навыки техники бега на различные дистанции (короткие, средние, длинные);<br>
+    - повысите уровень физической подготовленности по основным физическим качествам легкой атлетики.</p>
+    <p><strong>Место занятий:</strong> Блюхера 34, Дворец спорта НГТУ, беговая дорожка.</p>
+    <p><strong>Требования к компетенциям и особенности записи:</strong><br>
+    Особых требований к компетенциям занимающихся нет (исключение составляет состояние здоровья).<br>
+    Студенты 2 курса вам необходимо записаться к одному преподавателю на 2 занятия в неделю!</p>
+    <p><strong>Преподаватели:</strong><br>
+    <em>ст. преподаватель <a href="https://ciu.nstu.ru/kaf/persons/43841/about" target="_blank" class="teacher-link">Пересадина Екатерина Евгеньевна</a> (руководитель отделения) (<a href="mailto:peresadina@corp.nstu.ru" class="teacher-link">peresadina@corp.nstu.ru</a>)<br>
+    доцент <a href="https://ciu.nstu.ru/kaf/persons/22119/about" target="_blank" class="teacher-link">Забелина Лариса Геннадьевна</a> (<a href="mailto:zabelina@corp.nstu.ru" class="teacher-link">zabelina@corp.nstu.ru</a>)<br>
+    доцент <a href="https://ciu.nstu.ru/kaf/persons/54446/about" target="_blank" class="teacher-link">Тертычный Алексей Владимирович</a> (<a href="mailto:tertychnyj@corp.nstu.ru" class="teacher-link">tertychnyj@corp.nstu.ru</a>)<br>
+    ст. преподаватель <a href="https://ciu.nstu.ru/kaf/persons/2928/about" target="_blank" class="teacher-link">Гудков Анатолий Фёдорович</a> (<a href="mailto:gudkov@corp.nstu.ru" class="teacher-link">gudkov@corp.nstu.ru</a>)<br>
+    ст. преподаватель <a href="https://ciu.nstu.ru/kaf/persons/2960/about" target="_blank" class="teacher-link">Косарев Владимир Алексеевич</a> (<a href="mailto:kosarev@corp.nstu.ru" class="teacher-link">kosarev@corp.nstu.ru</a>)<br>
+    ст. преподаватель <a href="https://ciu.nstu.ru/kaf/persons/77281/about" target="_blank" class="teacher-link">Кобелева Елена Григорьевна</a> (<a href="mailto:e.kobeleva@corp.nstu.ru" class="teacher-link">e.kobeleva@corp.nstu.ru</a>)<br>
+    ст. преподаватель <a href="https://ciu.nstu.ru/kaf/persons/88463/about" target="_blank" class="teacher-link">Колмогоров Алексей Борисович</a> (<a href="mailto:kolmogorov@corp.nstu.ru" class="teacher-link">kolmogorov@corp.nstu.ru</a>)</em></p>
+`;
+                contactsPhraseHtml = 'По всем вопросам обращаться к руководителю отделения!';
+            } else if (lowerName.includes('футбол') || lowerName.includes('футб')) {
+                detailsHtml = `
+    <p><strong>О специализации:</strong><br>
+    на занятиях ФК по специализации «Футбол» Вы:<br>
+    - получите представление о футболе как о виде спорта, знания по судейству;<br>
+    - усовершенствуете навыки игры в футбол;<br>
+    - повысите уровень физической подготовленности по основным физическим качествам средствами футбола;<br>
+    <strong>!!!занятия проводятся в течение всего года на открытом воздухе.</strong></p>
+    <p><strong>Место занятий:</strong> Блюхера 34, открытая площадка по мини-футболу.</p>
+    <p><strong>Требования к компетенциям и особенности записи:</strong><br>
+    Для записи вам необходимы минимальные навыки игры в футбол и отсутствие противопоказаний к занятиям на улице в зимний период.</p>
+    <p><strong>Преподаватели:</strong><br>
+    <em>преподаватель <a href="https://ciu.nstu.ru/kaf/persons/42961/about" target="_blank" class="teacher-link">Зайцев Александр Петрович</a> (<a href="mailto:a.p.zajcev@corp.nstu.ru" class="teacher-link">a.p.zajcev@corp.nstu.ru</a>)<br>
+    преподаватель <a href="https://ciu.nstu.ru/kaf/persons/85923/about" target="_blank" class="teacher-link">Приходько Антон Юрьевич</a> (<a href="mailto:a.yu.prixodko@corp.nstu.ru" class="teacher-link">a.yu.prixodko@corp.nstu.ru</a>)</em></p>
+`;
+                contactsPhraseHtml = 'По всем вопросам обращаться к руководителю отделения:<br>ст. преподаватель <a href="https://ciu.nstu.ru/kaf/persons/20436/about" target="_blank" class="teacher-link">Гусева Марина Анатольевна</a> (руководитель отделения)<br><a href="mailto:m.guseva@corp.nstu.ru" class="teacher-link">m.guseva@corp.nstu.ru</a>';
+            } else {
+                detailsHtml = `<p><strong>Описание секции:</strong> ${sec.DESCRIPTION || sec.INFO || 'Информация о секции уточняется.'}</p>`;
+                contactsPhraseHtml = 'По всем вопросам обращаться к руководителю отделения!';
+            }
+
+            const isCurrentSelected = String(appData.state.sectionId) === String(sectionId);
+
+            const modalButtonsHtml = isCurrentSelected ? `
+        <button type="button" class="btn-modal-cancel" onclick="closeInfoModal()">Закрыть</button>
+        <button type="button" class="btn-danger" style="background: var(--accent-red); color: white; border: none; padding: 10px 20px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; flex: 1;" onclick="deselectSectionFromModal('${sectionId}')">Отменить выбор</button>
+    ` : `
+        <button type="button" class="btn-modal-cancel" onclick="closeInfoModal()">Закрыть</button>
+        <button type="button" class="btn-modal-confirm" onclick="selectSectionFromModal('${sectionId}')">Выбрать</button>
+    `;
+
+            modalContent.innerHTML = `
+        <h3 class="modal-title">${name}</h3>
+        <div class="modal-text" style="max-height: 60vh; overflow-y: auto;">
+            ${detailsHtml}
+            ${contactsPhraseHtml ? `<p style="margin-top: 16px;">${contactsPhraseHtml}</p>` : ''}
+        </div>
+        <div class="modal-actions">
+            ${modalButtonsHtml}
+        </div>
+    `;
+            document.getElementById('info-modal').classList.remove('hidden');
+        }
+
+        function closeInfoModal() {
+            document.getElementById('info-modal').classList.add('hidden');
+        }
+
+        function selectSectionFromModal(sectionId) {
+            selectSection(sectionId);
+            closeInfoModal();
+        }
+
+        function deselectSectionFromModal(sectionId) {
+            appData.state.sectionId = null;
+            appData.state.dayId = null;
+            appData.state.selectedTeacherId = null;
+            appData.state.selectedPairNum = null;
+            appData.state.slotId = null;
+            closeInfoModal();
+            renderBookingForm();
+        }
+
+        function renderDaysStep() {
+            const section = getSelectedSection();
+            if (!section) {
+                return `
+                    <h2 class="step-title">2. День посещения занятий</h2>
+                    <div class="step-subtitle">Доступно после выбора направления</div>
+                `;
+            }
+
+            const availableDays = [...new Set(section.slots.map(s => s.dayNumber))].filter(Boolean).sort((a, b) => a - b);
+
+            if (availableDays.length === 0) {
+                return `
+                    <h2 class="step-title">2. День посещения занятий</h2>
+                    <div class="step-subtitle error">Нет доступных дней для записи в данную секцию</div>
+                `;
+            }
+
+            const daysHtml = availableDays.map(dayNum => {
+                const isChecked = appData.state.dayId === dayNum;
+                return `
+                    <label class="radio-item">
+                        <input type="radio" name="day" value="${dayNum}" ${isChecked ? 'checked' : ''} onchange="selectDay(${dayNum})">
+                        <div class="custom-radio"></div>
+                        <span class="radio-title">${DAY_NAMES[dayNum] || ('День ' + dayNum)}</span>
+                    </label>
+                `;
+            }).join('');
+
+            return `
+                <h2 class="step-title">2. День посещения занятий</h2>
+                <div class="step-subtitle">${appData.state.dayId ? 'Выбранный день посещения занятий:' : 'Выберите день посещения занятий:'}</div>
+                <div class="days-grid">${daysHtml}</div>
+            `;
+        }
+
+        function renderTeachersStep() {
+            if (!appData.state.sectionId) {
+                return `
+                    <h2 class="step-title">3. Пара и преподаватель</h2>
+                    <div class="step-subtitle">Доступно после выбора направления и дня</div>
+                `;
+            }
+
+            if (!appData.state.dayId) {
+                return `
+                    <h2 class="step-title">3. Пара и преподаватель</h2>
+                    <div class="step-subtitle">Доступно после выбора дня посещения занятий</div>
+                `;
+            }
+
+            const section = getSelectedSection();
+            if (!section) return '';
+
+            const daySlots = section.slots.filter(s => s.dayNumber === appData.state.dayId);
+
+            if (daySlots.length === 0) {
+                return `
+                    <h2 class="step-title">3. Пара и преподаватель</h2>
+                    <div class="step-subtitle error">Нет доступных пар в выбранный день</div>
+                `;
+            }
+
+            const teachersMap = {};
+            daySlots.forEach(slot => {
+                const tId = String(slot.teacherId);
+                if (!teachersMap[tId]) {
+                    teachersMap[tId] = {
+                        id: slot.teacherId,
+                        name: slot.teacherName,
+                        fullName: formatFullName({ SURNAME: slot.teacherName }),
+                        post: slot.teacherPost,
+                        photo: slot.teacherPhoto,
+                        rawTeacher: slot.rawTeacher,
+                        slots: []
+                    };
+                }
+                teachersMap[tId].slots.push(slot);
+            });
+
+            Object.keys(teachersMap).forEach(tKey => {
+                const found = (section.teachersOrdered || []).find(t => String(t.id) === tKey);
+                if (found) {
+                    teachersMap[tKey].fullName = found.fullName;
+                    if (found.rawTeacher) {
+                        teachersMap[tKey].rawTeacher = found.rawTeacher;
+                    }
+                }
+            });
+
+            let sortedTeacherKeys = Object.keys(teachersMap).sort((a, b) => {
+                return teachersMap[a].fullName.localeCompare(teachersMap[b].fullName, 'ru');
+            });
+
+            if (appData.state.slotId && appData.state.selectedTeacherId) {
+                sortedTeacherKeys = sortedTeacherKeys.filter(tKey => String(tKey) === String(appData.state.selectedTeacherId));
+            }
+
+            const teachersColumnsHtml = sortedTeacherKeys.map(tKey => {
+                const teacher = teachersMap[tKey];
+                let teacherSlots = teacher.slots.sort((a, b) => a.lessonNumber - b.lessonNumber);
+
+                if (appData.state.slotId) {
+                    teacherSlots = teacherSlots.filter(s => `${s.teacherId}_${s.lessonNumber}` === appData.state.slotId);
+                }
+
+                const slotsHtml = teacherSlots.map(slot => {
+                    const slotKey = `${slot.teacherId}_${slot.lessonNumber}`;
+                    const isChecked = appData.state.slotId === slotKey;
+                    const times = LESSON_TIMES[slot.lessonNumber] || { start: slot.startTime, end: slot.endTime };
+
+                    return `
+                        <label class="slot-radio-item">
+                            <input type="radio" name="slot" value="${slotKey}" ${isChecked ? 'checked' : ''} onclick="selectSlot('${slotKey}', ${slot.teacherId}, ${slot.lessonNumber})">
+                            <div class="custom-radio"></div>
+                            <div class="slot-info-box">
+                                <div class="slot-title">№${slot.lessonNumber} · ${times.start} – ${times.end}</div>
+                                <div class="slot-places">${slot.freePlaces} мест</div>
+                            </div>
+                        </label>
+                    `;
+                }).join('');
+
+                const teacherDisplayName = formatShortName(teacher.rawTeacher || teacher.fullName || teacher.name);
+
+                return `
+                    <div class="teacher-column">
+                        <div class="teacher-profile-head">
+                            ${teacher.photo ? `<img src="${teacher.photo}" class="teacher-avatar-sm" onclick="openAvatarModal(this.src)">` : `<div class="teacher-avatar-sm" style="display:flex;align-items:center;justify-content:center;font-size:12px;color:#71717a;">ФЗК</div>`}
+                            <div>
+                                <div class="teacher-name-sm">${teacherDisplayName}</div>
+                                <div class="teacher-post-sm">${teacher.post}</div>
+                            </div>
+                        </div>
+                        <div class="slot-radio-list">
+                            ${slotsHtml}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            return `
+                <h2 class="step-title">3. Пара и преподаватель</h2>
+                <div class="step-subtitle">${appData.state.slotId ? 'Выбранные пара и преподаватель:' : 'Выберите пару и преподавателя:'}</div>
+                <div class="teachers-grid">${teachersColumnsHtml}</div>
+            `;
+        }
+
+        function selectSection(id) {
+            if (String(appData.state.sectionId) === String(id)) {
+                appData.state.sectionId = null;
+            } else {
+                appData.state.sectionId = String(id);
+            }
+            appData.state.dayId = null;
+            appData.state.selectedTeacherId = null;
+            appData.state.selectedPairNum = null;
+            appData.state.slotId = null;
+            renderBookingForm();
+        }
+
+        function selectDay(dayNum) {
+            appData.state.dayId = Number(dayNum);
+            appData.state.selectedTeacherId = null;
+            appData.state.selectedPairNum = null;
+            appData.state.slotId = null;
+            renderBookingForm();
+        }
+
+        function selectSlot(slotKey, teacherId, pairNum) {
+            if (appData.state.slotId === slotKey) {
+                appData.state.slotId = null;
+                appData.state.selectedTeacherId = null;
+                appData.state.selectedPairNum = null;
+            } else {
+                appData.state.slotId = slotKey;
+                appData.state.selectedTeacherId = Number(teacherId);
+                appData.state.selectedPairNum = Number(pairNum);
+            }
+            renderBookingForm();
+        }
+
+        function updateSubmitButton() {
+            const btn = document.getElementById('btn-submit');
+            if (btn) {
+                btn.disabled = !(
+                    appData.state.sectionId &&
+                    appData.state.dayId &&
+                    appData.state.selectedTeacherId &&
+                    appData.state.selectedPairNum
+                );
+            }
+        }
+
+        function openConfirmModal() {
+            document.getElementById('confirm-modal').classList.remove('hidden');
+        }
+
+        function closeConfirmModal() {
+            document.getElementById('confirm-modal').classList.add('hidden');
+        }
+
+        async function executeBooking() {
+            if (!appData.state.sectionId || !appData.state.dayId || !appData.state.selectedTeacherId || !appData.state.selectedPairNum) {
+                return;
+            }
+
+            const btn = document.getElementById('btn-modal-submit');
+            btn.innerText = "Загрузка...";
+            btn.disabled = true;
+
+            try {
+                const response = await fetch(`/api/book`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        tg_id: parseInt(tgId),
+                        day_number: appData.state.dayId,
+                        teacher_id: appData.state.selectedTeacherId,
+                        pair_number: appData.state.selectedPairNum,
+                        section_id: appData.state.sectionId
+                    })
+                });
+
+                const result = await response.json();
+                closeConfirmModal();
+
+                if (response.ok) {
+                    window.location.reload();
+                } else {
+                    alert(result.error || result.text || 'Не удалось выполнить запись');
+                    btn.innerText = "Записаться";
+                    btn.disabled = false;
+                }
+            } catch (e) {
+                closeConfirmModal();
+                alert('Произошла ошибка при связи с сервером');
+                btn.innerText = "Записаться";
+                btn.disabled = false;
+            }
+
+            showToast('Запись сохранена', 'Данные успешно сохранены');
+        }
+
+        function getSectionDetails(secName) {
+            const sName = (secName || '').toLowerCase();
+
+            if (sName.includes('плаван')) {
+                return {
+                    location: 'Учебно-спортивный оздоровительный центр (ул. Проспект Карла Маркса, 35/1, плавательный бассейн).',
+                    mapUrl: 'https://2gis.ru/novosibirsk/firm/141265769361622?m=82.902726%2C54.988601%2F16.33',
+                    shortDesc: 'на занятиях ФК по специализации «Плавание» Вы:...',
+                    fullHtml: `
+                        <p style="margin: 0 0 12px 0;"><strong>О специализации:</strong><br>
+                        на занятиях ФК по специализации «Плавание» Вы:<br>
+                        - получите представление о плавании как о виде спорта, знания по технике безопасности в бассейне;<br>
+                        - сформируете навыки техники различных видов плавания (брасс, кроль и др.);<br>
+                        - повысите уровень физической подготовленности по основным физическим качествам средствами плавания.</p>
+
+                        <p style="margin: 0 0 12px 0;"><strong>Места занятий:</strong> проспект Карла Маркса 35/1, Спортивный комплекс НГТУ, бассейн.</p>
+
+                        <p style="margin: 0 0 12px 0;"><strong>Требования к компетенциям и особенности записи:</strong><br>
+                        Особых требований к компетенциям занимающихся нет. Если вы плавать не умеете, вам необходимо это отметить при записи.<br>
+                        Отделение «Плавание» является дополнительным видом физкультурной направленности, которая предусматривает оплату за семестр, исключение составляет пара на 8.30, она является бесплатной!</p>
+
+                        <p style="margin: 0 0 16px 0;"><a href="https://www.nstu.ru/static_files/63323/NSTU_stoimost_uslug_UCFK_2020_2021.pdf" target="_blank" class="green-link">https://www.nstu.ru/static_files/63323/NSTU_stoimost_uslug_UCFK_2020_2021.pdf</a></p>
+
+                        <p style="margin: 0 0 12px 0;"><strong>Преподаватели:</strong><br>
+                        ст. преподаватель <a href="#" class="green-link">Васильева Ирина Анатольевна</a> (руководитель отделения)<br>
+                        <a href="mailto:i.vasileva@corp.nstu.ru" class="green-link">i.vasileva@corp.nstu.ru</a><br>
+                        ст. преподаватель <a href="#" class="green-link">Герасимов Сергей Николаевич</a><br>
+                        <a href="mailto:gerasimov@corp.nstu.ru" class="green-link">gerasimov@corp.nstu.ru</a><br>
+                        ст. преподаватель <a href="#" class="green-link">Ходакова Татьяна Аркадьевна</a><br>
+                        <a href="mailto:xodakova@corp.nstu.ru" class="green-link">xodakova@corp.nstu.ru</a><br>
+                        ст. преподаватель <a href="#" class="green-link">Опарина Людмила Анатольевна</a><br>
+                        <a href="mailto:oparina@corp.nstu.ru" class="green-link">oparina@corp.nstu.ru</a><br>
+                        ст. преподаватель <a href="#" class="green-link">Зырянова Альмира Каримовна</a><br>
+                        <a href="mailto:zyryanova@corp.nstu.ru" class="green-link">zyryanova@corp.nstu.ru</a><br>
+                        ст. преподаватель <a href="#" class="green-link">Зуевой Марине Викторовне</a><br>
+                        <a href="mailto:zueva@corp.nstu.ru" class="green-link">zueva@corp.nstu.ru</a><br>
+                        ст. преподаватель <a href="#" class="green-link">Гречанов Пётр Борисович</a><br>
+                        <a href="mailto:grechanov@corp.nstu.ru" class="green-link">grechanov@corp.nstu.ru</a><br>
+                        ст. преподаватель <a href="#" class="green-link">Макарова Виктория Николаевна</a><br>
+                        <a href="mailto:makarova@corp.nstu.ru" class="green-link">makarova@corp.nstu.ru</a><br>
+                        ст. преподаватель <a href="#" class="green-link">Кернер Валентина Робертовна</a><br>
+                        <a href="mailto:kerner@corp.nstu.ru" class="green-link">kerner@corp.nstu.ru</a><br>
+                        ст. преподаватель <a href="#" class="green-link">Попелюх Вера Павловна</a><br>
+                        <a href="mailto:v.popelyux@corp.nstu.ru" class="green-link">v.popelyux@corp.nstu.ru</a><br>
+                        ст. преподаватель <a href="#" class="green-link">Приходько Антон Юрьевич</a><br>
+                        <a href="mailto:a.yu.prixodko@corp.nstu.ru" class="green-link">a.yu.prixodko@corp.nstu.ru</a></p>
+
+                        <p style="margin-top: 16px;">По всем вопросам обращаться к руководителю отделения!</p>
+                    `
+                };
+            } else if (sName.includes('атлетик') || sName.includes('легк') || sName.includes('лёгк')) {
+                return {
+                    location: 'Дворец Спорта (ул. Блюхера, 34, беговая дорожка).',
+                    mapUrl: 'https://2gis.ru/novosibirsk/firm/141265770906626?m=82.901944%2C54.988924%2F17.04',
+                    shortDesc: 'на занятиях ФК по специализации «Лёгкая атлетика» Вы:...',
+                    fullHtml: `
+                <p style="margin: 0 0 12px 0;"><strong>О специализации:</strong><br>
+                на занятиях ФК по специализации «Лёгкая атлетика» Вы:<br>
+                - получите представление о легкой атлетике как о виде спорта, знания по основам занятий данным видом спорта, навыки по организации самостоятельных занятий, а также по некоторым практическим вопросам общей теории ФК и С;<br>
+                - сформируете навыки техники бега на различные дистанции (короткие, средние, длинные);<br>
+                - повысите уровень физической подготовленности по основным физическим качествам средствами легкой атлетики.</p>
+
+                <p style="margin: 0 0 12px 0;"><strong>Места занятий:</strong> Блюхера 34, Дворец спорта НГТУ, беговая дорожка.</p>
+
+                <p style="margin: 0 0 12px 0;"><strong>Требования к компетенциям и особенности записи:</strong><br>
+                Особых требований к компетенциям занимающихся нет (исключение составляет состояние здоровья).<br>
+                Студенты 2 курса вам необходимо записаться к одному преподавателю на 2 занятия в неделю!</p>
+
+                <p style="margin: 0 0 12px 0;"><strong>Преподаватели:</strong><br>
+                ст. преподаватель <a href="#" target="_blank" class="green-link">Пересадина Екатерина Евгеньевна</a> (руководитель отделения)<br>
+                <a href="mailto:peresadina@corp.nstu.ru" class="green-link">peresadina@corp.nstu.ru</a><br>
+                доцент <a href="#" target="_blank" class="green-link">Забелина Лариса Геннадьевна</a><br>
+                <a href="mailto:zabelina@corp.nstu.ru" class="green-link">zabelina@corp.nstu.ru</a><br>
+                доцент <a href="#" target="_blank" class="green-link">Тертычный Алексей Владимирович</a><br>
+                <a href="mailto:tertychnyj@corp.nstu.ru" class="green-link">tertychnyj@corp.nstu.ru</a><br>
+                ст. преподаватель <a href="#" target="_blank" class="green-link">Гудков Анатолий Фёдорович</a><br>
+                <a href="mailto:gudkov@corp.nstu.ru" class="green-link">gudkov@corp.nstu.ru</a><br>
+                ст. преподаватель <a href="#" target="_blank" class="green-link">Косарев Владимир Алексеевич</a><br>
+                <a href="mailto:kosarev@corp.nstu.ru" class="green-link">kosarev@corp.nstu.ru</a><br>
+                ст. преподаватель <a href="#" target="_blank" class="green-link">Кобелева Елена Григорьевна</a><br>
+                <a href="mailto:e.kobeleva@corp.nstu.ru" class="green-link">e.kobeleva@corp.nstu.ru</a><br>
+                ст. преподаватель <a href="#" target="_blank" class="green-link">Колмогоров Алексей Борисович</a><br>
+                <a href="mailto:kolmogorov@corp.nstu.ru" class="green-link">kolmogorov@corp.nstu.ru</a></p>
+
+                <p style="margin-top: 16px;">По всем вопросам обращаться к руководителю отделения!</p>
+            `
+                };
+            } else if (sName.includes('футбол')) {
+                return {
+                    location: 'Дворец Спорта (ул. Блюхера, 34, футбольная площадка).',
+                    mapUrl: 'https://2gis.ru/novosibirsk/firm/141265770906626/82.901916%2C54.989152?m=82.903247%2C54.989074%2F17.92',
+                    shortDesc: 'на занятиях ФК по специализации «Футбол» Вы:...',
+                    fullHtml: `
+                <p style="margin: 0 0 12px 0;"><strong>О специализации:</strong><br>
+                на занятиях ФК по специализации «Футбол» Вы:<br>
+                - получите представление о футболе как о виде спорта, знания по судейству;<br>
+                - усовершенствуете навыки игры в футбол;<br>
+                - повысите уровень физической подготовленности по основным физическим качествам средствами футбола;<br>
+                !!!занятия проводятся в течение всего года на открытом воздухе.</p>
+
+                <p style="margin: 0 0 12px 0;"><strong>Место занятий:</strong> Блюхера 34, открытая площадка по мини-футболу.</p>
+
+                <p style="margin: 0 0 12px 0;"><strong>Требования к компетенциям и особенности записи:</strong><br>
+                Для записи вам необходимы минимальные навыки игры в футбол и отсутствие противопоказаний к занятиям на улице в зимний период.</p>
+
+                <p style="margin: 0 0 12px 0;"><strong>Преподаватели:</strong><br>
+                преподаватель <a href="#" target="_blank" class="green-link">Зайцев Александр Петрович</a><br>
+                <a href="mailto:a.p.zajcev@corp.nstu.ru" class="green-link">a.p.zajcev@corp.nstu.ru</a><br>
+                преподаватель <a href="#" target="_blank" class="green-link">Приходько Антон Юрьевич</a><br>
+                <a href="mailto:a.yu.prixodko@corp.nstu.ru" class="green-link">a.yu.prixodko@corp.nstu.ru</a></p>
+
+                <p style="margin-top: 16px;">По всем вопросам обращаться к руководителю отделения: ст. преподаватель <a href="#" target="_blank" class="green-link">Гусева Марина Анатольевна</a> (руководитель отделения)<br>
+                <a href="mailto:m.guseva@corp.nstu.ru" class="green-link">m.guseva@corp.nstu.ru</a></p>
+            `
+                };
+            } else if (sName.includes('теннис')) {
+                return {
+                    location: 'Учебно-спортивный оздоровительный центр (ул. Проспект Карла Маркса, 35/1, зал № 101).',
+                    mapUrl: 'https://2gis.ru/novosibirsk/firm/141265769361622?m=82.902726%2C54.988601%2F16.33',
+                    shortDesc: 'на занятиях ФК по специализации «Настольный теннис» Вы:...',
+                    fullHtml: `
+                        <p style="margin: 0 0 12px 0;"><strong>О специализации:</strong><br>
+                        на занятиях ФК по специализации «Настольный теннис» Вы:<br>
+                        - получите представление о настольном теннисе как о виде спорта, знания по судейству и опыт участия в соревнованиях внутри учебных групп;<br>
+                        - усовершенствуете навыки игры в настольный теннис;<br>
+                        - повысите уровень физической подготовленности по основным физическим качествам средствами настольного тенниса.</p>
+
+                        <p style="margin: 0 0 12px 0;"><strong>Места занятий:</strong> проспект Карла Маркса 35/1, Спортивный комплекс НГТУ, зал фехтования к. 101.</p>
+
+                        <p style="margin: 0 0 12px 0;"><strong>Требования к компетенциям и особенности записи:</strong><br>
+                        Для записи вам необходимы минимальные навыки игры в настольный теннис и отсутствие противопоказаний к занятиям данным видом спорта.<br><br>
+                        Специализация «Настольный теннис» является дополнительным видом физкультурной направленности, которая предусматривает оплату за семестр. <a href="https://www.nstu.ru/static_files/63323/NSTU_stoimost_uslug_UCFK_2020_2021.pdf" target="_blank" class="green-link">https://www.nstu.ru/static_files/63323/NSTU_stoimost_uslug_UCFK_2020_2021.pdf</a></p>
+
+                        <p style="margin: 0 0 12px 0;"><strong>Преподаватели:</strong><br>
+                        доцент <a href="#" class="green-link">Сулейманов Камиль Ахметович</a><br>
+                        <a href="mailto:sulejmanov@corp.nstu.ru" class="green-link">sulejmanov@corp.nstu.ru</a><br>
+                        ст. преподаватель <a href="#" class="green-link">Гречанов Пётр Борисович</a><br>
+                        <a href="mailto:grechanov@corp.nstu.ru" class="green-link">grechanov@corp.nstu.ru</a><br>
+                        ст. преподаватель <a href="#" class="green-link">Сурнов Владимир Петрович</a><br>
+                        <a href="mailto:surnov@corp.nstu.ru" class="green-link">surnov@corp.nstu.ru</a></p>
+
+                        <p style="margin-top: 16px;">По всем вопросам обращаться к руководителю отделения: ст. преподаватель <a href="#" class="green-link">Гусева Марина Анатольевна</a><br>
+                        <a href="mailto:m.guseva@corp.nstu.ru" class="green-link">m.guseva@corp.nstu.ru</a></p>
+                    `
+                };
+            } else if (sName.includes('волейбол')) {
+                return {
+                    location: 'Дворец Спорта (ул. Блюхера, 34, волейбольная площадка).',
+                    mapUrl: 'https://2gis.ru/novosibirsk/firm/141265770906626?m=82.901944%2C54.988924%2F16.21',
+                    shortDesc: 'на занятиях ФК по специализации «Волейбол» Вы:...',
+                    fullHtml: `
+                        <p style="margin: 0 0 12px 0;"><strong>О специализации:</strong><br>
+                        на занятиях ФК по специализации «Волейбол» Вы:<br>
+                        - получите представление о волейболе как о виде спорта, знания по основам занятий данным видом спорта, навыки по судейству.<br>
+                        - усовершенствуете навыки игры в волейбол;<br>
+                        - повысите уровень физической подготовленности по основным физическим качествам средствами волейбола.</p>
+
+                        <p style="margin: 0 0 12px 0;"><strong>Места занятий:</strong> Блюхера 34, Дворец спорта НГТУ, игровая площадка (волейбольная).</p>
+
+                        <p style="margin: 0 0 12px 0;"><strong>Требования к компетенциям и особенности записи:</strong><br>
+                        Для записи вам необходимы минимальные навыки игры в волейбол и огромное желание научиться. Специализация «Волейбол» является дополнительным видом физкультурной направленности, которая предусматривает оплату за семестр.<br>
+                        <a href="https://www.nstu.ru/static_files/63323/NSTU_stoimost_uslug_UCFK_2020_2021.pdf" target="_blank" class="green-link">https://www.nstu.ru/static_files/63323/NSTU_stoimost_uslug_UCFK_2020_2021.pdf</a></p>
+
+                        <p style="margin: 0 0 12px 0;"><strong>Преподаватели:</strong><br>
+                        ст. преподаватель <a href="#" class="green-link">Гусева Марина Анатольевна</a> (руководитель отделения)<br>
+                        <a href="mailto:m.guseva@corp.nstu.ru" class="green-link">m.guseva@corp.nstu.ru</a><br>
+                        зав.каф.ФВ <a href="#" class="green-link">Климов Владимир Михайлович</a><br>
+                        <a href="mailto:v.klimov@corp.nstu.ru" class="green-link">v.klimov@corp.nstu.ru</a></p>
+
+                        <p style="margin-top: 16px;">По всем вопросам обращаться к руководителю отделения!</p>
+                    `
+                };
+            } else if (sName.includes('баскетбол')) {
+                return {
+                    location: 'Дворец Спорта (ул. Блюхера, 34, баскетбольная площадка).',
+                    mapUrl: 'https://2gis.ru/novosibirsk/firm/141265770906626?m=82.901944%2C54.988924%2F16.21',
+                    shortDesc: 'на занятиях ФК по специализации «Баскетбол» Вы:...',
+                    fullHtml: `
+                        <p style="margin: 0 0 12px 0;"><strong>О специализации:</strong><br>
+                        на занятиях ФК по специализации «Баскетбол» Вы:<br>
+                        - получите представление о баскетболе как о виде спорта, знания по основам судейства;<br>
+                        - усовершенствуете навыки игры в баскетбол;<br>
+                        - повысите уровень физической подготовленности по основным физическим качествам средствами баскетбола.</p>
+
+                        <p style="margin: 0 0 12px 0;"><strong>Места занятий:</strong> Блюхера 34, Дворец спорта НГТУ, игровая площадка (баскетбольная).</p>
+
+                        <p style="margin: 0 0 12px 0;"><strong>Требования к компетенциям и особенности записи:</strong><br>
+                        Студент должен обладать минимальными знаниями и умениями игры в баскетбол. Специализация «Баскетбол» является дополнительным видом физкультурной направленности, которая предусматривает оплату за семестр.<br>
+                        <a href="https://www.nstu.ru/static_files/63323/NSTU_stoimost_uslug_UCFK_2020_2021.pdf" target="_blank" class="green-link">https://www.nstu.ru/static_files/63323/NSTU_stoimost_uslug_UCFK_2020_2021.pdf</a></p>
+
+                        <p style="margin: 0 0 12px 0;"><strong>Преподаватели:</strong><br>
+                        ст. преподаватель <a href="#" class="green-link">Герасимов Константин Александрович</a><br>
+                        <a href="mailto:k.gerasimov@corp.nstu.ru" class="green-link">k.gerasimov@corp.nstu.ru</a></p>
+
+                        <p style="margin-top: 16px;">По всем вопросам обращаться к преподавателю по корпоративной почте!</p>
+                    `
+                };
+            } else if (sName.includes('крав') || sName.includes('мага')) {
+                return {
+                    location: 'Спорткомплекс "Богатырь" (ул. Проспект Карла Маркса, 20 к2а, зал №209).',
+                    mapUrl: 'https://2gis.ru/novosibirsk/firm/70000001034987625/82.906168%2C54.986624?floor=1&m=82.906527%2C54.986277%2F19.31',
+                    shortDesc: 'на занятиях ФК по специализации самооборона и рукопашный бой...',
+                    fullHtml: `
+                        <p style="margin: 0 0 12px 0;"><strong>О специализации:</strong><br>
+                        на занятиях ФК по специализации самооборона и рукопашный бой «Крав-мага» Вы:<br>
+                        - получите представление о личной безопасности, разберёте типовые ситуации, связанные с нападением одного и группы вооружённых и не вооружённых агрессоров, с которыми вы можете столкнуться на улице;<br>
+                        - сформируете навыки ударной техники (руками, ногами, локтями, коленями), освоите приёмы самозащиты от атак и угроз ножом, защиты от захватов (за руки, одежду и волосы) в различных положениях (спереди, сбоку, сзади; сидя, стоя, лёжа);<br>
+                        - приобретёте психологическую уверенность в себе, сформируете навыки уверенного поведения в конфликтных ситуациях.</p>
+
+                        <p style="margin: 0 0 12px 0;"><strong>Места занятий:</strong> К. Маркса, 20, Спортивный комплекс «Богатырь», зал 209 (зал борьбы).</p>
+
+                        <p style="margin: 0 0 12px 0;"><strong>Требования к компетенциям и особенности записи:</strong><br>
+                        У вас должна быть основная медицинская группа, не должно быть противопоказаний к кувыркам и падениям.<br><br>
+                        Специализация «Крав-мага» является дополнительным видом физкультурной направленности, которая предусматривает оплату за семестр.<br>
+                        <a href="https://www.nstu.ru/static_files/63323/NSTU_stoimost_uslug_UCFK_2020_2021.pdf" target="_blank" class="green-link">https://www.nstu.ru/static_files/63323/NSTU_stoimost_uslug_UCFK_2020_2021.pdf</a></p>
+
+                        <p style="margin: 0 0 12px 0;">Для более глубокого понимания предмета рекомендуем ознакомиться с <a href="https://elibrary.nstu.ru/source?id=79586" target="_blank" class="green-link">пособием</a> Зуев П. Е., Пересадина Е. Е., Кокшаров М. И. Физическая культура. Крав-мага</p>
+
+                        <p style="margin: 0 0 12px 0;"><strong>Преподаватели:</strong><br>
+                        ст. преподаватель <a href="#" class="green-link">Зуев Павел Евгеньевич</a><br>
+                        <a href="mailto:zuev@corp.nstu.ru" class="green-link">zuev@corp.nstu.ru</a></p>
+                    `
+                };
+            } else {
+                return {
+                    location: 'Спортивный комплекс НГТУ.',
+                    mapUrl: 'https://2gis.ru/novosibirsk/firm/141265769361622',
+                    shortDesc: 'на занятиях физической культурой по выбранному направлению...',
+                    fullHtml: `
+                        <p style="margin: 0 0 12px 0;"><strong>О специализации:</strong><br>
+                        на занятиях физической культурой по выбранному направлению вы освоите необходимые практические навыки, улучшите уровень физической подготовленности и изучите профильные элементы дисциплины.</p>
+
+                        <p style="margin: 0 0 12px 0;"><strong>Места занятий:</strong> Спортивный комплекс НГТУ.</p>
+
+                        <p style="margin: 0 0 12px 0;"><strong>Требования к компетенциям и особенности записи:</strong><br>
+                        Особых требований к компетенциям занимающихся нет.</p>
+                    `
+                };
+            }
+        }
+
+        function renderActiveRegistration() {
+            const container = document.getElementById('main-content');
+            const reg = appData.registration;
+
+            const dayNum = reg.DAY_NUMBER;
+            const dayTitle = DAY_FULL_NAMES[dayNum] || 'День';
+            const lesson = reg.LESSON || {};
+            const pairNum = lesson.NUMBER || lesson.PAIR_NUMBER || '';
+            const times = LESSON_TIMES[pairNum] || { start: (lesson.START_TIME || '').slice(0, 5), end: (lesson.FINISH_TIME || '').slice(0, 5) };
+
+            let freePlacesText = '5 свободных мест осталось';
+            if (reg.AVAILABLE_PLACES !== undefined && reg.AVAILABLE_PLACES !== null) {
+                if (Number(reg.AVAILABLE_PLACES) === 0) {
+                    freePlacesText = 'Свободные места закончились';
+                } else {
+                    freePlacesText = `${reg.AVAILABLE_PLACES} свободных мест осталось`;
+                }
+            }
+
+            const teacher = reg.TEACHER || {};
+            const tName = formatFullName(teacher);
+            const tPost = teacher.POST || 'Преподаватель';
+            const tEmail = teacher.EMAIL || '';
+            const tPhoto = teacher.PHOTO || 'avatar.jpg';
+
+            const tId = teacher.ID || teacher.PERSON_ID || teacher.id;
+            const tUrl = teacher.URL || teacher.PROFILE_URL || (tId && `https://ciu.nstu.ru/kaf/persons/${tId}/about`);
+
+            const section = reg.SECTION || {};
+            const price = section.PRICE_PER_SEMESTER ? `${section.PRICE_PER_SEMESTER} ₽ / семестр` : 'Бесплатно';
+            const secName = section.NAME || '';
+            const regId = reg.ID || reg.REGISTRATION_ID || (section && section.ID) || 0;
+
+            const details = getSectionDetails(secName);
+
+            container.innerHTML = `
+                <div class="top-info">
+                    <div style="width: 100%;">
+                        <div class="success-tag">Вы записаны!</div>
+                        <h1 class="success-day">${dayTitle}</h1>
+                        <div class="success-meta">Пара №${pairNum} · ${times.start} – ${times.end} &nbsp;&nbsp; ${freePlacesText}</div>
+                        
+                        <div class="teacher-card teacher-box">
+                            <img src="${tPhoto}" alt="Аватар" class="teacher-avatar teacher-photo" onclick="openAvatarModal(this.src)">
+                            <div class="teacher-info">
+                                <div class="teacher-name" style="font-weight: 700; font-size: 15px; color: var(--text-main);">${tName}</div>
+                                <div class="teacher-role" style="font-size: 13px; color: var(--text-sub); margin-top: 2px;">${tPost}</div>
+                                <a href="${tUrl}" target="_blank" class="green-link" style="font-size: 13px; display: inline-block; margin-top: 4px;">Страница преподавателя</a>
+                                <div class="contact-label" style="font-size: 12px; color: var(--text-sub); margin-top: 6px;">Контактные данные:</div>
+                                <a href="mailto:${tEmail || 'k.gerasimov@corp.nstu.ru'}" class="green-link" style="font-size: 13px; display: inline-block; margin-top: 2px;">${tEmail || 'k.gerasimov@corp.nstu.ru'}</a>
+                            </div>
+                        </div>
+
+                        <p style="font-size: 14px; line-height: 1.5; margin: 16px 0 8px 0; color: var(--text-main);">
+                            Вам необходимо посещать занятия по физической культуре в указанное время.
+                        </p>
+                        <p style="font-size: 14px; line-height: 1.5; margin: 0 0 16px 0; color: var(--text-main);">
+                            Место проведения: ${details.location}
+                        </p>
+
+                        <a href="${details.mapUrl}" target="_blank" class="btn-how-to-get">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink: 0;">
+                                <g clip-path="url(#clip0_2gis)">
+                                    <g clip-path="url(#clip1_2gis)">
+                                        <path d="M24 0H0V24H24V0Z" fill="#19AA1E"></path>
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M0 0H24V7.875L0 4.125V0Z" fill="#FFB919"></path>
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M0 21.375L24 17.625V24H0V21.375Z" fill="#82D714"></path>
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M0 3.65039L8.3772 4.95959C9.42 4.29959 10.6608 3.93779 12 3.93779C13.8546 3.93779 15.5208 4.63199 16.734 5.85119C16.8864 6.00479 17.031 6.16559 17.166 6.33299L24 7.40099V8.34899L17.8602 7.39019C18.3197 8.26852 18.5605 9.24473 18.5622 10.236C18.5622 11.5218 18.2748 12.804 17.6802 14.091L17.6622 14.13L17.4102 14.6712H16.8126C15.5796 14.6712 14.7618 15.0396 14.2272 15.6936C13.8072 16.2066 13.5648 16.8984 13.4832 17.6532L13.4802 17.6772L13.4682 17.7972L13.4634 17.85L13.4538 17.952C13.4263 18.2369 13.4053 18.5223 13.3908 18.8082L24 17.1504V18.0996L0 21.8496V20.9004L10.6212 19.2408L10.6164 19.0278L10.6146 18.9678L10.614 18.9372L10.6122 18.8892C10.6026 18.6312 10.5792 18.3 10.5414 17.8992L10.5342 17.823L10.521 17.691C10.4448 16.932 10.2054 16.2318 9.7866 15.711C9.258 15.0528 8.4474 14.679 7.2246 14.6712H6.5904L6.3378 14.13C5.7312 12.8298 5.4378 11.535 5.4378 10.236C5.4378 8.60279 6.1002 7.02359 7.2666 5.85119C7.3002 5.81699 7.3338 5.78399 7.3686 5.75099L0 4.59899V3.65039Z" fill="white"></path>
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M12 4.875C15.3504 4.875 17.625 7.4538 17.625 10.236C17.625 11.3532 17.3814 12.5154 16.8126 13.734C13.5156 13.734 12.702 16.0944 12.5478 17.58L12.5382 17.679C12.4934 18.1034 12.4632 18.5293 12.4476 18.9558L11.5548 19.095V19.0662C11.5512 18.7302 11.5188 18.2586 11.4588 17.6514L11.4564 17.625C11.3142 16.143 10.5174 13.7334 7.1874 13.7334C6.6186 12.5154 6.375 11.3532 6.375 10.236C6.375 7.4538 8.649 4.875 12 4.875Z" fill="#0070CC"></path>
+                                    </g>
+                                </g>
+                                <defs>
+                                    <clipPath id="clip0_2gis"><rect width="24" height="24" rx="6" fill="white"></rect></clipPath>
+                                    <clipPath id="clip1_2gis"><rect width="24" height="24" fill="white"></rect></clipPath>
+                                </defs>
+                            </svg>
+                            <span>Как добраться</span>
+                        </a>
+
+                        <div class="discipline-section" style="margin-top: 16px;">
+                            <h3 style="margin: 0 0 4px 0; font-size: 20px;">${secName}</h3>
+                            <div style="font-size: 14px; color: var(--text-sub); margin-bottom: 12px;">${price}</div>
+                            
+                            <div class="collapsible-content text-collapsed" id="${details.id}">
+                                ${details.fullHtml}
+                            </div>
+                            <button type="button" class="toggle-btn green-link" onclick="toggleText('${details.id}', this)">Показать полностью</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="action-card" style="margin-top: 20px;">
+                    <button type="button" class="btn-cancel" onclick="openCancelModal(${regId})">Отменить запись</button>
+                </div>
+            `;
+        }
+
+        async function cancelBooking(registrationId) {
+            if (!confirm('Вы уверены, что хотите отменить запись?')) return;
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/cancel?tg_id=${tgId}&registration_id=${activeCancelRegId}`, { method: 'POST' });
+                if (response.ok) {
+                    window.location.reload();
+                } else {
+                    const data = await response.json();
+                    alert(data.error || 'Не удалось отменить запись');
+                }
+            } catch (e) {
+                alert('Произошла ошибка при связи с сервером');
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+<footer class="app-footer">
+    <div class="footer-container">
+        <div class="footer-col">
+            <div class="footer-title">E-Services</div>
+            <p class="footer-text">
+                Новосибирский государственный<br>
+                технический университет НЭТИ
+            </p>
+            <p class="footer-text copyright">© 2022-2026</p>
+        </div>
+
+        <div class="footer-col">
+            <div class="footer-title">Техническая поддержка</div>
+            <p class="footer-text">Центр информатизации университета, 1 корпус, к. 306</p>
+            <a href="tel:319-61-10" class="footer-link">319-61-10</a>
+            <a href="mailto:e-service@ciu.nstu.ru" class="footer-link">e-service@ciu.nstu.ru</a>
+        </div>
+
+        <div class="footer-col footer-col-right">
+            <a class="btn-portal" href="https://nstu.ru/" target="_blank" rel="noopener noreferrer">
+                <span>Портал НГТУ</span>
+                <svg class="portal-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24">
+                    <path
+                        d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3z">
+                    </path>
+                </svg>
+            </a>
+        </div>
+    </div>
+</footer>
+
+</html>
