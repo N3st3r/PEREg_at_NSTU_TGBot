@@ -1,4 +1,4 @@
-<img width="1477" height="288" alt="image" src="https://github.com/user-attachments/assets/eba3186d-92cd-4db2-9e0d-337807e48b5a" /># PEREg_at_NSTU_TGBot
+# PEREg_at_NSTU_TGBot
 Бот для записи студентов НГТУ на дисциплину "Физическая культура". Web-App является формальным форком официального приложения для записи, которое находится в боте для мессенджера MAX.
 
 # Установка
