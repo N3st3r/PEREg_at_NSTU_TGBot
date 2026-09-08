@@ -4,4 +4,3 @@
 # Установка
 
 1. Для начала зайти в @BotFather и создать бота
-<img width="379" height="696" alt="image" src="https://github.com/user-attachments/assets/817c7d5e-bacf-442e-9f74-6664ff31f9a4" />
